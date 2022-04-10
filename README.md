@@ -4,13 +4,15 @@ Practice of hexagonal architecture tuned for Go.
 
 ## Considerations
 
-- Hexagonal Architecture
+- [Hexagonal Architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software))
   + `pkg/controller`: Primary adapters
   + `pkg/infrastructure`: Secondary adapters
   + `pkg/core`: Cores
 
 - Dependency Injection
-  + Compile-time DI using google wire
+  + Compile-time DI using [google wire](https://github.com/google/wire)
+
+- [Go standard layout](https://github.com/golang-standards/project-layout)
 
 ## Development
 
