@@ -1,0 +1,29 @@
+version: '3.8'
+
+networks:
+  app-tier:
+    driver: bridge
+
+volumes:
+  mongo-volume:
+    driver: local
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:4.4.13'
+    networks:
+      - app-tier
+    ports:
+      - ${MONGODB_PORT}:27017
+    volumes:
+      - mongo-volume:/bitnami/mongodb
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_NAME=replicaset
+      - MONGODB_REPLICA_SET_KEY=hexago
+      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
+      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
