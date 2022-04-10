@@ -7,9 +7,9 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func Initialize(debug bool) {
+func Initialize(develop bool) {
 	var cfg zap.Config
-	if debug {
+	if develop {
 		cfg = devLoggerConfig()
 	} else {
 		cfg = prodLoggerConfig()

@@ -1,3 +1,4 @@
+mode: development
 mongodb:
   uri: mongodb://hexagoer:hexagoer@localhost:27017/?authSource=hexago&replicaSet=replicaset
   database: hexago
