@@ -21,18 +21,21 @@ func main() {
 	defer logger.S().Sync()
 
 	logger.S().Info("Start dependency injection")
-	diCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	startupCtx, cancel := context.WithTimeout(
+		context.Background(),
+		time.Duration(cfg.Timeout.Startup)*time.Second)
 	defer cancel()
 
-	beans, err := dependencyInjection(diCtx, cfg)
+	beans, err := dependencyInjection(startupCtx, cfg)
 	if err != nil {
 		logger.S().Fatalf("Failed to inject dependencies: %v", err)
 	}
 	logger.S().Info("Done dependency injection")
 
 	logger.S().Info("Start graceful shutdown")
-	ctx := context.Background()
-	shutdownCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	shutdownCtx, cancel := context.WithTimeout(
+		context.Background(),
+		time.Duration(cfg.Timeout.Shutdown)*time.Second)
 	defer cancel()
 
 	shutdown(shutdownCtx, beans)
