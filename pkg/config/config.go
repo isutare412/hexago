@@ -13,6 +13,11 @@ func (c *Config) IsProduction() bool {
 }
 
 type MongoDBConfig struct {
-	Uri      string `yaml:"uri"`
-	Database string `yaml:"database"`
+	Addrs             []string `yaml:"addrs"`
+	Database          string   `yaml:"database"`
+	AuthSource        string   `yaml:"authSource"`
+	Username          string   `yaml:"username"`
+	Password          string   `yaml:"password"`
+	HeartbeatInterval int      `yaml:"heartbeatInterval"`
+	MaxConnectionPool int      `yaml:"maxConnectionPool"`
 }

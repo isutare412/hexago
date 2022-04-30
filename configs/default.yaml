@@ -1,4 +1,10 @@
 mode: development
 mongodb:
-  uri: mongodb://hexagoer:hexagoer@localhost:27017/?authSource=hexago&replicaSet=replicaset
+  addrs:
+    - localhost:27017
   database: hexago
+  authSource: hexago
+  username: hexagoer
+  password: hexagoer
+  heartbeatInterval: 15000 # milliseconds
+  maxConnectionPool: 50

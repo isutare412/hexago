@@ -3,6 +3,8 @@ package repo
 import (
 	"context"
 	"fmt"
+	"strings"
+	"time"
 
 	"github.com/isutare412/hexago/pkg/config"
 	"github.com/isutare412/hexago/pkg/core/entity"
@@ -19,16 +21,29 @@ type MongoDB struct {
 
 func NewMongoDB(
 	ctx context.Context,
-	cfg *config.Config,
+	cfg *config.MongoDBConfig,
 ) (*MongoDB, error) {
-	cli, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.MongoDB.Uri))
+	heartbeat := time.Duration(cfg.HeartbeatInterval)
+	addrs := strings.Join(cfg.Addrs, ",")
+	uri := fmt.Sprintf("mongodb://%s", addrs)
+
+	cli, err := mongo.Connect(ctx, options.Client().
+		ApplyURI(uri).
+		SetAuth(options.Credential{
+			AuthSource: cfg.AuthSource,
+			Username:   cfg.Username,
+			Password:   cfg.Password,
+		}).
+		SetHeartbeatInterval(heartbeat*time.Millisecond).
+		SetMaxPoolSize(uint64(cfg.MaxConnectionPool)),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("connecting mongodb: %w", err)
 	}
 
 	return &MongoDB{
 		cli: cli,
-		db:  cli.Database(cfg.MongoDB.Database),
+		db:  cli.Database(cfg.Database),
 	}, nil
 }
 
