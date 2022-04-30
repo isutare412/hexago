@@ -38,6 +38,10 @@ func NewMongoDB(
 		return nil, fmt.Errorf("connecting mongodb: %w", err)
 	}
 
+	if err := cli.Ping(ctx, nil); err != nil {
+		return nil, fmt.Errorf("ping MongoDB: %w", err)
+	}
+
 	return &MongoDB{
 		cli: cli,
 		db:  cli.Database(cfg.Database),
