@@ -62,6 +62,6 @@ func (mdb *MongoDB) StartSession(
 	return mongo.NewSessionContext(ctx, sess), nil
 }
 
-func (mdb *MongoDB) Close(ctx context.Context) error {
+func (mdb *MongoDB) Shutdown(ctx context.Context) error {
 	return mdb.cli.Disconnect(ctx)
 }

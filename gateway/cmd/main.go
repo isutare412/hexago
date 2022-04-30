@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"flag"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/isutare412/hexago/gateway/pkg/config"
@@ -26,11 +29,14 @@ func main() {
 		time.Duration(cfg.Timeout.Startup)*time.Second)
 	defer cancel()
 
-	beans, err := dependencyInjection(startupCtx, cfg)
+	components, err := dependencyInjection(startupCtx, cfg)
 	if err != nil {
 		logger.S().Fatalf("Failed to inject dependencies: %v", err)
 	}
 	logger.S().Info("Done dependency injection")
+
+	appCtx := context.Background()
+	runAndWait(appCtx, components)
 
 	logger.S().Info("Start graceful shutdown")
 	shutdownCtx, cancel := context.WithTimeout(
@@ -38,12 +44,33 @@ func main() {
 		time.Duration(cfg.Timeout.Shutdown)*time.Second)
 	defer cancel()
 
-	shutdown(shutdownCtx, beans)
+	shutdown(shutdownCtx, components)
 	logger.S().Info("Done graceful shutdown")
 }
 
-func shutdown(ctx context.Context, beans *beans) {
-	if err := beans.mongoRepo.Close(ctx); err != nil {
-		logger.S().Error("Failed to close mongodb: %v", err)
+func runAndWait(ctx context.Context, components *components) {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	httpServerFails := components.httpServer.Run(ctx)
+	logger.S().Infof("Run http server")
+
+	signals := make(chan os.Signal, 3)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	select {
+	case err := <-httpServerFails:
+		logger.S().Errorf("Error from http server: %v", err)
+	case sig := <-signals:
+		logger.S().Infof("Caught signal[%s]", sig.String())
+	}
+}
+
+func shutdown(ctx context.Context, components *components) {
+	if err := components.httpServer.Shutdown(ctx); err != nil {
+		logger.S().Errorf("Failed to shutdown http server: %v", err)
+	}
+
+	if err := components.mongoRepo.Shutdown(ctx); err != nil {
+		logger.S().Errorf("Failed to shutdown MongoDB: %v", err)
 	}
 }

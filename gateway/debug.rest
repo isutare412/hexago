@@ -1,0 +1,29 @@
+@url=http://localhost:8080
+
+################################################################################
+# Create user
+################################################################################
+POST {{url}}/api/v1/users
+Content-Type: application/json
+
+{
+  "email": "foo@bar.com",
+  "nickname": "redshore",
+  "givenName": "Suhyuk",
+  "familyName": "Lee",
+  "birthYear": 1993,
+  "birthMonth": 9,
+  "birthDay": 25
+}
+
+################################################################################
+# Get user
+################################################################################
+GET {{url}}/api/v1/users?email=foo@bar.com
+Content-Type: application/json
+
+################################################################################
+# Delete user
+################################################################################
+DELETE {{url}}/api/v1/users?email=foo@bar.com
+Content-Type: application/json

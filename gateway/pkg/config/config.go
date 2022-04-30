@@ -3,6 +3,7 @@ package config
 type Config struct {
 	Logger  *LoggerConfig  `yaml:"logger"`
 	Timeout *TimeoutConfig `yaml:"timeout"`
+	Server  *ServerConfig  `yaml:"server"`
 	MongoDB *MongoDBConfig `yaml:"mongodb"`
 }
 
@@ -14,6 +15,15 @@ type LoggerConfig struct {
 type TimeoutConfig struct {
 	Startup  int `yaml:"startup"`
 	Shutdown int `yaml:"shutdown"`
+}
+
+type ServerConfig struct {
+	Http *HttpServerConfig `yaml:"http"`
+}
+
+type HttpServerConfig struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
 }
 
 type MongoDBConfig struct {

@@ -8,6 +8,12 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+var (
+	fastLogger   *zap.Logger
+	slowLogger   *zap.SugaredLogger
+	accessLogger *zap.Logger
+)
+
 func Initialize(cfg *config.LoggerConfig) {
 	var zCfg zap.Config
 	if cfg.Format == config.LogFormatJson {
@@ -21,7 +27,27 @@ func Initialize(cfg *config.LoggerConfig) {
 	if err != nil {
 		panic(fmt.Errorf("building logger: %w", err))
 	}
-	zap.ReplaceGlobals(logger)
+
+	accLogger, err := accessLoggerConfig(zCfg).Build()
+	if err != nil {
+		panic(fmt.Errorf("building access logger: %w", err))
+	}
+
+	fastLogger = logger
+	slowLogger = logger.Sugar()
+	accessLogger = accLogger
+}
+
+func A() *zap.Logger {
+	return accessLogger
+}
+
+func S() *zap.SugaredLogger {
+	return slowLogger
+}
+
+func L() *zap.Logger {
+	return fastLogger
 }
 
 func textLoggerConfig() zap.Config {
@@ -38,10 +64,8 @@ func jsonLoggerConfig() zap.Config {
 	return cfg
 }
 
-func S() *zap.SugaredLogger {
-	return zap.S()
-}
-
-func L() *zap.Logger {
-	return zap.L()
+func accessLoggerConfig(cfg zap.Config) zap.Config {
+	cfg.EncoderConfig.CallerKey = zapcore.OmitKey
+	cfg.EncoderConfig.FunctionKey = zapcore.OmitKey
+	return cfg
 }

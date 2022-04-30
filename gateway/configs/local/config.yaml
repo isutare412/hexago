@@ -1,9 +1,13 @@
 logger:
-  format: text
+  format: text # text / json
   stackTrace: false
 timeout:
   startup: 10 # seconds
   shutdown: 30 # seconds
+server:
+  http:
+    host: '0.0.0.0'
+    port: 8080
 mongodb:
   addrs:
     - localhost:27017
