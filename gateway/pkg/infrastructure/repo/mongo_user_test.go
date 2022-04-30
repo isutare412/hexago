@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/isutare412/hexago/pkg/config"
-	"github.com/isutare412/hexago/pkg/core/entity"
+	"github.com/isutare412/hexago/gateway/pkg/config"
+	"github.com/isutare412/hexago/gateway/pkg/core/entity"
 	"github.com/stretchr/testify/assert"
 )
 

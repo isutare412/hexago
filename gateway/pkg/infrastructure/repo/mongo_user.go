@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/isutare412/hexago/pkg/core/entity"
+	"github.com/isutare412/hexago/gateway/pkg/core/entity"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

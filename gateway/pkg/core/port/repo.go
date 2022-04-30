@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	"github.com/isutare412/hexago/pkg/core/entity"
+	"github.com/isutare412/hexago/gateway/pkg/core/entity"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/isutare412/hexago/pkg/core/entity"
-	"github.com/isutare412/hexago/pkg/core/port"
+	"github.com/isutare412/hexago/gateway/pkg/core/entity"
+	"github.com/isutare412/hexago/gateway/pkg/core/port"
 )
 
 type Service struct {

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/isutare412/hexago/pkg/config"
+	"github.com/isutare412/hexago/gateway/pkg/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

@@ -5,8 +5,8 @@ import (
 	"flag"
 	"time"
 
-	"github.com/isutare412/hexago/pkg/config"
-	"github.com/isutare412/hexago/pkg/logger"
+	"github.com/isutare412/hexago/gateway/pkg/config"
+	"github.com/isutare412/hexago/gateway/pkg/logger"
 )
 
 var cfgPath = flag.String("config", "configs/local/config.yaml", "path to yaml config file")

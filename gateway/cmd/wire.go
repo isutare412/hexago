@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
-	"github.com/isutare412/hexago/pkg/config"
-	"github.com/isutare412/hexago/pkg/core/service/user"
-	"github.com/isutare412/hexago/pkg/infrastructure/repo"
+	"github.com/isutare412/hexago/gateway/pkg/config"
+	"github.com/isutare412/hexago/gateway/pkg/core/service/user"
+	"github.com/isutare412/hexago/gateway/pkg/infrastructure/repo"
 )
 
 type beans struct {

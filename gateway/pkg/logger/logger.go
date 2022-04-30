@@ -3,7 +3,7 @@ package logger
 import (
 	"fmt"
 
-	"github.com/isutare412/hexago/pkg/config"
+	"github.com/isutare412/hexago/gateway/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

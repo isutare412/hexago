@@ -1,4 +1,4 @@
-module github.com/isutare412/hexago
+module github.com/isutare412/hexago/gateway
 
 go 1.18
 
