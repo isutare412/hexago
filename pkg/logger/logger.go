@@ -3,36 +3,36 @@ package logger
 import (
 	"fmt"
 
+	"github.com/isutare412/hexago/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func Initialize(develop bool) {
-	var cfg zap.Config
-	if develop {
-		cfg = devLoggerConfig()
+func Initialize(cfg *config.LoggerConfig) {
+	var zCfg zap.Config
+	if cfg.Format == config.LogFormatJson {
+		zCfg = jsonLoggerConfig()
 	} else {
-		cfg = prodLoggerConfig()
+		zCfg = textLoggerConfig()
 	}
+	zCfg.DisableStacktrace = !cfg.StackTrace
 
-	logger, err := cfg.Build()
+	logger, err := zCfg.Build()
 	if err != nil {
 		panic(fmt.Errorf("building logger: %w", err))
 	}
 	zap.ReplaceGlobals(logger)
 }
 
-func devLoggerConfig() zap.Config {
+func textLoggerConfig() zap.Config {
 	cfg := zap.NewDevelopmentConfig()
-	cfg.DisableStacktrace = true
 	cfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	cfg.EncoderConfig.FunctionKey = zapcore.OmitKey
 	return cfg
 }
 
-func prodLoggerConfig() zap.Config {
+func jsonLoggerConfig() zap.Config {
 	cfg := zap.NewProductionConfig()
-	cfg.DisableStacktrace = true
 	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	cfg.EncoderConfig.FunctionKey = "func"
 	return cfg

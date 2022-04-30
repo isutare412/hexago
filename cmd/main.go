@@ -9,7 +9,7 @@ import (
 	"github.com/isutare412/hexago/pkg/logger"
 )
 
-var cfgPath = flag.String("config", "configs/default.yaml", "path to yaml config file")
+var cfgPath = flag.String("config", "configs/local/config.yaml", "path to yaml config file")
 
 func main() {
 	flag.Parse()
@@ -17,11 +17,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	logger.Initialize(!cfg.IsProduction())
+	logger.Initialize(cfg.Logger)
 	defer logger.S().Sync()
 
 	logger.S().Info("Start dependency injection")
-	diCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	diCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	beans, err := dependencyInjection(diCtx, cfg)

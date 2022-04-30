@@ -1,4 +1,6 @@
-mode: development
+logger:
+  format: text
+  stackTrace: false
 mongodb:
   addrs:
     - localhost:27017
