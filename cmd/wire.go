@@ -4,14 +4,13 @@ import (
 	"context"
 
 	"github.com/isutare412/hexago/pkg/config"
-	"github.com/isutare412/hexago/pkg/core/port"
-	"github.com/isutare412/hexago/pkg/core/service/student"
+	"github.com/isutare412/hexago/pkg/core/service/user"
 	"github.com/isutare412/hexago/pkg/infrastructure/repo"
 )
 
 type beans struct {
-	mongoRepo      *repo.MongoDB
-	studentService port.StudentService
+	mongoRepo   *repo.MongoDB
+	userService *user.Service
 }
 
 func dependencyInjection(
@@ -23,10 +22,10 @@ func dependencyInjection(
 		return nil, err
 	}
 
-	studentService := student.NewService(mongoRepo)
+	userService := user.NewService(mongoRepo)
 
 	return &beans{
-		mongoRepo:      mongoRepo,
-		studentService: studentService,
+		mongoRepo:   mongoRepo,
+		userService: userService,
 	}, nil
 }

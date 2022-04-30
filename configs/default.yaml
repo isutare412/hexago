@@ -3,8 +3,8 @@ mongodb:
   addrs:
     - localhost:27017
   database: hexago
-  authSource: hexago
-  username: hexagoer
-  password: hexagoer
+  authSource: admin
+  username: root
+  password: root
   heartbeatInterval: 15000 # milliseconds
   maxConnectionPool: 50

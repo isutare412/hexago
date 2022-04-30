@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/isutare412/hexago/pkg/core/entity"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -12,9 +11,9 @@ type Sessional interface {
 	StartSession(context.Context) (mongo.SessionContext, error)
 }
 
-type StudentRepository interface {
+type UserRepo interface {
 	Sessional
-	InsertStudent(ctx context.Context, stu *entity.Student) (*entity.Student, error)
-	FindStudentById(ctx context.Context, id primitive.ObjectID) (*entity.Student, error)
-	DeleteStudentById(ctx context.Context, id primitive.ObjectID) (int64, error)
+	InsertUser(ctx context.Context, user *entity.User) error
+	FindUserByEmail(ctx context.Context, email string) (*entity.User, error)
+	DeleteUserByEmail(ctx context.Context, email string) error
 }

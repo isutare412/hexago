@@ -1,5 +1,5 @@
 package repo
 
 const (
-	collStudent = "students"
+	collUser = "users"
 )
