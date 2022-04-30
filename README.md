@@ -8,25 +8,19 @@ Practice of hexagonal architecture tuned for Go.
   + `pkg/controller`: Primary adapters
   + `pkg/infrastructure`: Secondary adapters
   + `pkg/core`: Cores
-
 - Dependency Injection
-  + Compile-time DI using [google wire](https://github.com/google/wire)
-
+- [CQRS with Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 - [Go standard layout](https://github.com/golang-standards/project-layout)
 
-## Development
+## Modules
+
+### [Hexago Gateway](./gateway)
+
+API gateway module for hexago service.
+
+## Infrastructure
 
 ```bash
 # Start infrastructures using docker-compose
 make infra
-```
-
-```bash
-# Generate dependency injection code
-make wire
-```
-
-```bash
-# Run hexago server locally
-make run-local
 ```
