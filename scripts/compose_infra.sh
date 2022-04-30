@@ -3,7 +3,7 @@
 ROOTDIR=$(dirname $(dirname $0))
 
 PROJECT_NAME=hexago
-MODE=dev
+MODE=local
 
 COMPOSE_FILE=$ROOTDIR/deployments/docker-compose.infra.yaml
 ENV_FILE=$ROOTDIR/deployments/$MODE.env

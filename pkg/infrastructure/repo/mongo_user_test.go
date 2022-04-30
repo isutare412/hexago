@@ -48,7 +48,7 @@ func TestMongoUserRepo(t *testing.T) {
 }
 
 func loadMongoTestConfig() (*config.Config, error) {
-	cfg, err := config.Load("../../../configs/default.yaml")
+	cfg, err := config.Load("../../../configs/local/config.yaml")
 	if err != nil {
 		return nil, fmt.Errorf("loading config: %w", err)
 	}
