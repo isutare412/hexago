@@ -1,0 +1,174 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API gateway for Hexago project.",
+        "title": "Hexago API Gateway",
+        "contact": {},
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/users": {
+            "get": {
+                "description": "Get an user.",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "foo@bar.com",
+                        "description": "Contents provider id.",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.getUserResp"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/http.errorResp"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create an user.",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "description": "Request to create user.",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.createUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/http.errorResp"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an user.",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "x-example": "foo@bar.com",
+                        "description": "Contents provider id.",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/http.errorResp"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "http.createUserReq": {
+            "type": "object",
+            "properties": {
+                "birthDay": {
+                    "type": "integer",
+                    "example": 25
+                },
+                "birthMonth": {
+                    "type": "integer",
+                    "example": 9
+                },
+                "birthYear": {
+                    "type": "integer",
+                    "example": 1993
+                },
+                "email": {
+                    "type": "string",
+                    "example": "foo@bar.com"
+                },
+                "familyName": {
+                    "type": "string"
+                },
+                "givenName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.errorResp": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.getUserResp": {
+            "type": "object",
+            "properties": {
+                "birthDay": {
+                    "type": "integer",
+                    "example": 25
+                },
+                "birthMonth": {
+                    "type": "integer",
+                    "example": 9
+                },
+                "birthYear": {
+                    "type": "integer",
+                    "example": 1993
+                },
+                "email": {
+                    "type": "string",
+                    "example": "foo@bar.com"
+                },
+                "familyName": {
+                    "type": "string"
+                },
+                "givenName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -10,6 +10,12 @@ import (
 	"github.com/isutare412/hexago/gateway/pkg/logger"
 )
 
+// @Tags		User
+// @Description	Create an user.
+// @Router		/api/v1/users [post]
+// @Param		request	body	createUserReq	true "Request to create user."
+// @Success		200
+// @Failure		default	{object}	errorResp
 func createUser(uSvc port.UserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -43,6 +49,12 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 	}
 }
 
+// @Tags		User
+// @Description	Get an user.
+// @Router		/api/v1/users [get]
+// @Param		email	query	string	true "Contents provider id." extensions(x-example=foo@bar.com)
+// @Success		200		{object}	getUserResp
+// @Failure		default	{object}	errorResp
 func getUser(uSvc port.UserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -73,6 +85,12 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 	}
 }
 
+// @Tags		User
+// @Description	Delete an user.
+// @Router		/api/v1/users [delete]
+// @Param		email	query	string	true "Contents provider id." extensions(x-example=foo@bar.com)
+// @Success		200
+// @Failure		default	{object}	errorResp
 func deleteUser(uSvc port.UserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()

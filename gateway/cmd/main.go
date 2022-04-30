@@ -14,6 +14,9 @@ import (
 
 var cfgPath = flag.String("config", "configs/local/config.yaml", "path to yaml config file")
 
+// @Title Hexago API Gateway
+// @Version 0.1
+// @Description API gateway for Hexago project.
 func main() {
 	flag.Parse()
 	cfg, err := config.Load(*cfgPath)

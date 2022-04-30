@@ -11,14 +11,14 @@ type errorResp struct {
 }
 
 type createUserReq struct {
-	Email      string `json:"email"`
+	Email      string `json:"email" example:"foo@bar.com"`
 	Nickname   string `json:"nickname"`
 	GivenName  string `json:"givenName"`
 	MiddleName string `json:"middleName"`
 	FamilyName string `json:"familyName"`
-	BirthYear  int    `json:"birthYear"`
-	BirthMonth int    `json:"birthMonth"`
-	BirthDay   int    `json:"birthDay"`
+	BirthYear  int    `json:"birthYear" example:"1993"`
+	BirthMonth int    `json:"birthMonth" example:"9"`
+	BirthDay   int    `json:"birthDay" example:"25"`
 }
 
 func (r *createUserReq) IntoUser() *entity.User {
@@ -37,14 +37,14 @@ func (r *createUserReq) IntoUser() *entity.User {
 }
 
 type getUserResp struct {
-	Email      string `json:"email"`
+	Email      string `json:"email" example:"foo@bar.com"`
 	Nickname   string `json:"nickname"`
 	GivenName  string `json:"givenName"`
 	MiddleName string `json:"middleName"`
 	FamilyName string `json:"familyName"`
-	BirthYear  int    `json:"birthYear"`
-	BirthMonth int    `json:"birthMonth"`
-	BirthDay   int    `json:"birthDay"`
+	BirthYear  int    `json:"birthYear" example:"1993"`
+	BirthMonth int    `json:"birthMonth" example:"9"`
+	BirthDay   int    `json:"birthDay" example:"25"`
 }
 
 func (r *getUserResp) FromUser(user *entity.User) {

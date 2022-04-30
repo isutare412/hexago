@@ -1,0 +1,116 @@
+definitions:
+  http.createUserReq:
+    properties:
+      birthDay:
+        example: 25
+        type: integer
+      birthMonth:
+        example: 9
+        type: integer
+      birthYear:
+        example: 1993
+        type: integer
+      email:
+        example: foo@bar.com
+        type: string
+      familyName:
+        type: string
+      givenName:
+        type: string
+      middleName:
+        type: string
+      nickname:
+        type: string
+    type: object
+  http.errorResp:
+    properties:
+      msg:
+        type: string
+    type: object
+  http.getUserResp:
+    properties:
+      birthDay:
+        example: 25
+        type: integer
+      birthMonth:
+        example: 9
+        type: integer
+      birthYear:
+        example: 1993
+        type: integer
+      email:
+        example: foo@bar.com
+        type: string
+      familyName:
+        type: string
+      givenName:
+        type: string
+      middleName:
+        type: string
+      nickname:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API gateway for Hexago project.
+  title: Hexago API Gateway
+  version: "0.1"
+paths:
+  /api/v1/users:
+    delete:
+      description: Delete an user.
+      parameters:
+      - description: Contents provider id.
+        in: query
+        name: email
+        required: true
+        type: string
+        x-example: foo@bar.com
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResp'
+      tags:
+      - User
+    get:
+      description: Get an user.
+      parameters:
+      - description: Contents provider id.
+        in: query
+        name: email
+        required: true
+        type: string
+        x-example: foo@bar.com
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.getUserResp'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResp'
+      tags:
+      - User
+    post:
+      description: Create an user.
+      parameters:
+      - description: Request to create user.
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/http.createUserReq'
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResp'
+      tags:
+      - User
+swagger: "2.0"

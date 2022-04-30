@@ -10,6 +10,15 @@ help: ## Display this help.
 
 ##@ Development
 
+swag: ## Install swag.
+	@go install github.com/swaggo/swag/cmd/swag@v1.8.1
+	@echo "Installed github.com/swaggo/swag/cmd/swag@v1.8.1"
+
+docs: ## Generate OpenAPI specification for Swagger UI.
+	@swag init \
+		-d "${ROOTDIR}/cmd,${ROOTDIR}/pkg/controller/http" \
+		-o ${ROOTDIR}/api
+
 test: ## Run go test.
 	@go test -v -count=1 ./...
 

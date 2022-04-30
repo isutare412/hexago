@@ -6,8 +6,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	_ "github.com/isutare412/hexago/gateway/api"
 	"github.com/isutare412/hexago/gateway/pkg/config"
 	"github.com/isutare412/hexago/gateway/pkg/core/port"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Server struct {
@@ -19,9 +21,10 @@ func NewServer(
 	uSvc port.UserService,
 ) *Server {
 	root := mux.NewRouter()
-	root.Use(wrapResponseWriter, accessLog)
+	root.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	api := root.PathPrefix("/api/v1").Subrouter()
+	api.Use(wrapResponseWriter, accessLog)
 	api.HandleFunc("/users", createUser(uSvc)).Methods("POST")
 	api.HandleFunc("/users", getUser(uSvc)).Methods("GET")
 	api.HandleFunc("/users", deleteUser(uSvc)).Methods("DELETE")
