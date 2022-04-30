@@ -48,7 +48,6 @@ type getUserResp struct {
 }
 
 func (r *getUserResp) FromUser(user *entity.User) {
-	user.Birth.UTC().Month()
 	r.Email = user.Email
 	r.Nickname = user.Nickname
 	r.GivenName = user.GivenName

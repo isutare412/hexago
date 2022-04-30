@@ -16,7 +16,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 
 		reqBytes, err := io.ReadAll(r.Body)
 		if err != nil {
-			logger.L().Error(err.Error())
+			logger.S().Error(err)
 			responseError(w, http.StatusInternalServerError, &errorResp{
 				Msg: "failed to read request body",
 			})
@@ -25,7 +25,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 
 		var req createUserReq
 		if err := json.Unmarshal(reqBytes, &req); err != nil {
-			logger.L().Error(err.Error())
+			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
 				Msg: "request body does not follow required format",
 			})
@@ -34,10 +34,10 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 
 		user := req.IntoUser()
 		if err := uSvc.Create(ctx, user); err != nil {
-			logger.L().Error(err.Error())
-			responseError(w, http.StatusInternalServerError, &errorResp{
-				Msg: err.Error(),
-			})
+			logger.S().With(
+				"email", user.Email,
+			).Error(err)
+			responseDomainError(w, err)
 			return
 		}
 	}
@@ -51,7 +51,7 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 		email := queryParams.Get("email")
 		if email == "" {
 			err := fmt.Errorf("need 'email' query parameter")
-			logger.L().Error(err.Error())
+			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
 				Msg: err.Error(),
 			})
@@ -60,10 +60,10 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 
 		user, err := uSvc.GetByEmail(ctx, email)
 		if err != nil {
-			logger.L().Error(err.Error())
-			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: err.Error(),
-			})
+			logger.S().With(
+				"email", email,
+			).Error(err)
+			responseDomainError(w, err)
 			return
 		}
 
@@ -81,7 +81,7 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 		email := queryParams.Get("email")
 		if email == "" {
 			err := fmt.Errorf("need 'email' query parameter")
-			logger.L().Error(err.Error())
+			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
 				Msg: err.Error(),
 			})
@@ -89,10 +89,10 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 		}
 
 		if err := uSvc.DeleteByEmail(ctx, email); err != nil {
-			logger.L().Error(err.Error())
-			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: err.Error(),
-			})
+			logger.S().With(
+				"email", email,
+			).Error(err)
+			responseDomainError(w, err)
 			return
 		}
 	}
