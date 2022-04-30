@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"time"
 
 	"github.com/isutare412/hexago/pkg/config"
@@ -9,13 +10,13 @@ import (
 	"github.com/isutare412/hexago/pkg/logger"
 )
 
+var cfgPath = flag.String("config", "configs/default.yaml", "path to yaml config file")
+
 func main() {
-	cfg := config.Config{
-		Mode: "development",
-		MongoDB: &config.MongoDBConfig{
-			Uri:      "mongodb://hexagoer:hexagoer@localhost:27017/?authSource=hexago&replicaSet=replicaset",
-			Database: "hexago",
-		},
+	flag.Parse()
+	cfg, err := config.Load(*cfgPath)
+	if err != nil {
+		panic(err)
 	}
 	logger.Initialize(!cfg.IsProduction())
 	defer logger.S().Sync()
@@ -24,14 +25,14 @@ func main() {
 	defer cancel()
 
 	logger.S().Info("Start dependency injection")
-	beans, err := dependencyInjection(diCtx, &cfg)
+	beans, err := dependencyInjection(diCtx, cfg)
 	if err != nil {
 		logger.S().Fatalf("Failed to inject dependencies: %v", err)
 	}
 	logger.S().Info("Done dependency injection")
 
 	appCtx := context.Background()
-	stu, err := beans.stuSvc.AddStudent(appCtx, &entity.Student{
+	stu, err := beans.studentService.AddStudent(appCtx, &entity.Student{
 		GivenName:  "Suhyuk",
 		FamilyName: "Lee",
 		Birth:      time.Date(1993, 9, 25, 0, 0, 0, 0, time.UTC),
@@ -40,13 +41,13 @@ func main() {
 		logger.S().Fatalf("Inserting student: %v", err)
 	}
 
-	stu, err = beans.stuSvc.StudentById(appCtx, stu.Id)
+	stu, err = beans.studentService.StudentById(appCtx, stu.Id)
 	if err != nil {
 		logger.S().Fatalf("Finding student: %v", err)
 	}
 	logger.S().Debugf("Student[%v]", *stu)
 
-	err = beans.stuSvc.RemoveStudentById(appCtx, stu.Id)
+	err = beans.studentService.RemoveStudentById(appCtx, stu.Id)
 	if err != nil {
 		logger.S().Fatalf("Removing student: %v", err)
 	}
