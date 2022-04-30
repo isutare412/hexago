@@ -16,8 +16,5 @@ infra: ## Docker compose entrypoint of infra.
 
 ##@ Development
 
-wire: ## Generate wire code.
-	@go generate ./cmd/...
-
 run-local: ## Run hexago locally.
-	@go run ./cmd/main.go ./cmd/wire_gen.go
+	@go run ./cmd/main.go ./cmd/wire.go
