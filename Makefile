@@ -16,5 +16,8 @@ infra: ## Docker compose entrypoint of infra.
 
 ##@ Development
 
-run-local: ## Run hexago locally.
+test: ## Run go test.
+	@go test -v -count=1 ./...
+
+run: ## Run hexago locally.
 	@go run ./cmd/main.go ./cmd/wire.go
