@@ -8,7 +8,7 @@ Practice of hexagonal architecture tuned for Go.
   + `pkg/controller`: Primary adapters
   + `pkg/infrastructure`: Secondary adapters
   + `pkg/core`: Cores
-- Dependency Injection
+- [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
 - [CQRS with Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 - [Go standard layout](https://github.com/golang-standards/project-layout)
 
@@ -17,6 +17,10 @@ Practice of hexagonal architecture tuned for Go.
 ### [Hexago Gateway](./gateway)
 
 API gateway module for hexago service.
+
+### [Hexago Payment](./payment)
+
+TBD.
 
 ## Infrastructure
 
