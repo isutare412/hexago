@@ -17,3 +17,13 @@ mongodb:
   password: root
   heartbeatInterval: 15000 # milliseconds
   maxConnectionPool: 50
+kafka:
+  addrs:
+    - localhost:59092
+    - localhost:59093
+  topics:
+    paymentRequest:
+      topic: paymentRequest
+      username: user
+      password: user
+      maxRetry: 3
