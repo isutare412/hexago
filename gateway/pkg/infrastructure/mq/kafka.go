@@ -6,8 +6,10 @@ import (
 	"sync"
 
 	"github.com/Shopify/sarama"
+	pbPay "github.com/isutare412/hexago/common/pkg/pb/payment"
 	"github.com/isutare412/hexago/gateway/pkg/config"
 	"github.com/isutare412/hexago/gateway/pkg/logger"
+	"google.golang.org/protobuf/proto"
 )
 
 type KafkaProducer struct {
@@ -74,6 +76,20 @@ func (p *KafkaProducer) Shutdown(ctx context.Context) error {
 		return fmt.Errorf("producer shutdown failure: %w", err)
 	case <-closeDone:
 	}
+	return nil
+}
+
+func (p *KafkaProducer) SendDonationRequest(req *pbPay.DonationRequest) error {
+	reqBytes, err := proto.Marshal(req)
+	if err != nil {
+		return fmt.Errorf("marshaling donation request: %w", err)
+	}
+
+	msg := sarama.ProducerMessage{
+		Topic: p.topic,
+		Value: sarama.ByteEncoder(reqBytes),
+	}
+	p.cli.Input() <- &msg
 	return nil
 }
 

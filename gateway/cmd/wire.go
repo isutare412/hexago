@@ -6,6 +6,7 @@ import (
 
 	"github.com/isutare412/hexago/gateway/pkg/config"
 	"github.com/isutare412/hexago/gateway/pkg/controller/http"
+	"github.com/isutare412/hexago/gateway/pkg/core/service/donation"
 	"github.com/isutare412/hexago/gateway/pkg/core/service/user"
 	"github.com/isutare412/hexago/gateway/pkg/infrastructure/mq"
 	"github.com/isutare412/hexago/gateway/pkg/infrastructure/repo"
@@ -15,6 +16,7 @@ type components struct {
 	mongoRepo       *repo.MongoDB
 	paymentProducer *mq.KafkaProducer
 	userService     *user.Service
+	donationService *donation.Service
 	httpServer      *http.Server
 }
 
@@ -41,6 +43,7 @@ func dependencyInjection(
 		}
 
 		userService := user.NewService(mongoRepo)
+		donationService := donation.NewService(mongoRepo, paymentProducer)
 
 		httpServer := http.NewServer(cfg.Server.Http, userService)
 
@@ -48,6 +51,7 @@ func dependencyInjection(
 			mongoRepo:       mongoRepo,
 			paymentProducer: paymentProducer,
 			userService:     userService,
+			donationService: donationService,
 			httpServer:      httpServer,
 		}
 	}()

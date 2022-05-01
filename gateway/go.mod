@@ -5,12 +5,14 @@ go 1.18
 require (
 	github.com/Shopify/sarama v1.32.0
 	github.com/gorilla/mux v1.8.0
+	github.com/isutare412/hexago/common v0.0.0
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/http-swagger v1.2.6
 	github.com/swaggo/swag v1.8.1
 	go.mongodb.org/mongo-driver v1.8.4
 	go.uber.org/zap v1.21.0
+	google.golang.org/protobuf v1.28.0
 )
 
 require (
@@ -66,3 +68,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
+
+replace github.com/isutare412/hexago/common => ../common
