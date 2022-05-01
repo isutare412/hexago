@@ -2,11 +2,13 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/isutare412/hexago/gateway/pkg/config"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -64,4 +66,43 @@ func (mdb *MongoDB) StartSession(
 
 func (mdb *MongoDB) Shutdown(ctx context.Context) error {
 	return mdb.cli.Disconnect(ctx)
+}
+
+func (mdb *MongoDB) Migrate(ctx context.Context) error {
+	_, err := mdb.db.Collection(collUser).Indexes().
+		CreateMany(ctx, []mongo.IndexModel{
+			{
+				Keys:    bson.M{"id": 1},
+				Options: options.Index().SetUnique(true),
+			},
+			{
+				Keys:    bson.M{"email": 1},
+				Options: options.Index().SetUnique(true),
+			},
+		})
+	if err != nil {
+		return fmt.Errorf("creating user indexes: %w", err)
+	}
+	return nil
+}
+
+func isErrDupKey(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	var exc mongo.WriteException
+	if !errors.As(err, &exc) {
+		return false
+	}
+	for _, err := range exc.WriteErrors {
+		if err.Code == errCodeDuplicateKey {
+			return true
+		}
+	}
+	return false
+}
+
+func isErrNotFound(err error) bool {
+	return errors.Is(err, mongo.ErrNoDocuments)
 }

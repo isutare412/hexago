@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -26,29 +27,42 @@ func main() {
 	logger.Initialize(cfg.Logger)
 	defer logger.Sync()
 
-	logger.S().Info("Start dependency injection")
 	startupCtx, cancel := context.WithTimeout(
 		context.Background(),
 		time.Duration(cfg.Timeout.Startup)*time.Second)
 	defer cancel()
 
+	logger.S().Info("Start dependency injection")
 	components, err := dependencyInjection(startupCtx, cfg)
 	if err != nil {
 		logger.S().Fatalf("Failed to inject dependencies: %v", err)
 	}
 	logger.S().Info("Done dependency injection")
 
+	logger.S().Info("Start initialization")
+	if err := initialize(startupCtx, components); err != nil {
+		logger.S().Fatalf("Failed to initialize components: %v", err)
+	}
+	logger.S().Info("Done initialization")
+
 	appCtx := context.Background()
 	runAndWait(appCtx, components)
 
-	logger.S().Info("Start graceful shutdown")
 	shutdownCtx, cancel := context.WithTimeout(
 		context.Background(),
 		time.Duration(cfg.Timeout.Shutdown)*time.Second)
 	defer cancel()
 
+	logger.S().Info("Start graceful shutdown")
 	shutdown(shutdownCtx, components)
 	logger.S().Info("Done graceful shutdown")
+}
+
+func initialize(ctx context.Context, components *components) error {
+	if err := components.mongoRepo.Migrate(ctx); err != nil {
+		return fmt.Errorf("migrating MongoDB: %w", err)
+	}
+	return nil
 }
 
 func runAndWait(ctx context.Context, components *components) {

@@ -2,14 +2,12 @@ package repo
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	centity "github.com/isutare412/hexago/common/pkg/entity"
 	"github.com/isutare412/hexago/gateway/pkg/derror"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (mdb *MongoDB) InsertUser(
@@ -19,7 +17,12 @@ func (mdb *MongoDB) InsertUser(
 	coll := mdb.db.Collection(collUser)
 
 	_, err := coll.InsertOne(ctx, user)
-	if err != nil {
+	if isErrDupKey(err) {
+		return derror.Bind(
+			err,
+			fmt.Errorf("%w: %v", derror.ErrDuplicateKey, err),
+		)
+	} else if err != nil {
 		return fmt.Errorf("inserting user: %w", err)
 	}
 	return nil
@@ -33,15 +36,13 @@ func (mdb *MongoDB) FindUserById(
 
 	filter := bson.D{primitive.E{Key: "id", Value: id}}
 	res := coll.FindOne(ctx, filter)
-	if err := res.Err(); err != nil {
-		err = fmt.Errorf("finding user: %w", err)
-		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, derror.Bind(
-				err,
-				fmt.Errorf("%w: no such user with id[%s]",
-					derror.ErrUserNotFound, id),
-			)
-		}
+	if err := res.Err(); isErrNotFound(err) {
+		return nil, derror.Bind(
+			err,
+			fmt.Errorf("%w: no such user with id[%s]",
+				derror.ErrUserNotFound, id),
+		)
+	} else if err != nil {
 		return nil, err
 	}
 
