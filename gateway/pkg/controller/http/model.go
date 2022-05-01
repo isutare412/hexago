@@ -7,7 +7,7 @@ import (
 )
 
 type errorResp struct {
-	Msg string `json:"msg"`
+	ErrorMsg string `json:"errorMsg"`
 }
 
 type createUserReq struct {

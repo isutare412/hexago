@@ -176,7 +176,7 @@ const docTemplate = `{
         "http.errorResp": {
             "type": "object",
             "properties": {
-                "msg": {
+                "errorMsg": {
                     "type": "string"
                 }
             }

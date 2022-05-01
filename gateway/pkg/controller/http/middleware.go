@@ -34,7 +34,7 @@ func (rw *responseWrapper) errorMsg() string {
 	if err := json.Unmarshal(rw.body, &res); err != nil {
 		return ""
 	}
-	return res.Msg
+	return res.ErrorMsg
 }
 
 func wrapResponseWriter(h http.Handler) http.Handler {

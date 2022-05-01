@@ -24,7 +24,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 		if err != nil {
 			logger.S().Error(err)
 			responseError(w, http.StatusInternalServerError, &errorResp{
-				Msg: "failed to read request body",
+				ErrorMsg: "failed to read request body",
 			})
 			return
 		}
@@ -33,7 +33,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 		if err := json.Unmarshal(reqBytes, &req); err != nil {
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: "request body does not follow required format",
+				ErrorMsg: "request body does not follow required format",
 			})
 			return
 		}
@@ -66,7 +66,7 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 			err := fmt.Errorf("need 'id' query parameter")
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: err.Error(),
+				ErrorMsg: err.Error(),
 			})
 			return
 		}
@@ -102,7 +102,7 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 			err := fmt.Errorf("need 'id' query parameter")
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: err.Error(),
+				ErrorMsg: err.Error(),
 			})
 			return
 		}
@@ -131,7 +131,7 @@ func requestDonation(dSvc port.DonationService) http.HandlerFunc {
 		if err != nil {
 			logger.S().Error(err)
 			responseError(w, http.StatusInternalServerError, &errorResp{
-				Msg: "failed to read request body",
+				ErrorMsg: "failed to read request body",
 			})
 			return
 		}
@@ -140,7 +140,7 @@ func requestDonation(dSvc port.DonationService) http.HandlerFunc {
 		if err := json.Unmarshal(reqBytes, &req); err != nil {
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
-				Msg: "request body does not follow required format",
+				ErrorMsg: "request body does not follow required format",
 			})
 			return
 		}

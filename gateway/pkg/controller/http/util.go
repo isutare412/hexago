@@ -21,19 +21,19 @@ func responseDomainError(w http.ResponseWriter, err error) {
 
 	derr := derror.Unbind(err)
 	if derr == nil {
-		res.Msg = err.Error()
+		res.ErrorMsg = err.Error()
 		responseError(w, http.StatusInternalServerError, &res)
 		return
 	}
 
 	for knownErr, code := range derror.DomainErrorToStatusCode {
 		if errors.Is(derr, knownErr) {
-			res.Msg = derr.Error()
+			res.ErrorMsg = derr.Error()
 			responseError(w, code, &res)
 			return
 		}
 	}
-	res.Msg = derr.Error()
+	res.ErrorMsg = derr.Error()
 	responseError(w, http.StatusInternalServerError, &res)
 }
 
@@ -41,7 +41,7 @@ func responseJson(w http.ResponseWriter, res interface{}) {
 	resBytes, err := json.Marshal(res)
 	if err != nil {
 		res := errorResp{
-			Msg: "failed to marshal response",
+			ErrorMsg: "failed to marshal response",
 		}
 		responseError(w, http.StatusInternalServerError, &res)
 		return

@@ -28,7 +28,7 @@ definitions:
     type: object
   http.errorResp:
     properties:
-      msg:
+      errorMsg:
         type: string
     type: object
   http.getUserResp:
