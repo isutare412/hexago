@@ -13,11 +13,11 @@ import (
 )
 
 type components struct {
-	mongoRepo       *repo.MongoDB
-	paymentProducer *mq.KafkaProducer
-	userService     *user.Service
-	donationService *donation.Service
-	httpServer      *http.Server
+	mongoRepo        *repo.MongoDB
+	donationProducer *mq.KafkaProducer
+	userService      *user.Service
+	donationService  *donation.Service
+	httpServer       *http.Server
 }
 
 func dependencyInjection(
@@ -36,23 +36,23 @@ func dependencyInjection(
 			return
 		}
 
-		paymentProducer, err := mq.NewKafkaProducer(cfg.Kafka, cfg.Kafka.Topics.PaymentRequest)
+		donationProducer, err := mq.NewKafkaProducer(cfg.Kafka, cfg.Kafka.Topics.DonationRequest)
 		if err != nil {
 			diFail <- err
 			return
 		}
 
 		userService := user.NewService(mongoRepo)
-		donationService := donation.NewService(mongoRepo, paymentProducer)
+		donationService := donation.NewService(mongoRepo, donationProducer)
 
-		httpServer := http.NewServer(cfg.Server.Http, userService)
+		httpServer := http.NewServer(cfg.Server.Http, userService, donationService)
 
 		diDone <- &components{
-			mongoRepo:       mongoRepo,
-			paymentProducer: paymentProducer,
-			userService:     userService,
-			donationService: donationService,
-			httpServer:      httpServer,
+			mongoRepo:        mongoRepo,
+			donationProducer: donationProducer,
+			userService:      userService,
+			donationService:  donationService,
+			httpServer:       httpServer,
 		}
 	}()
 

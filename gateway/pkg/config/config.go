@@ -43,7 +43,7 @@ type KafkaConfig struct {
 }
 
 type KafkaTopicConfig struct {
-	PaymentRequest *KafkaProducerConfig `yaml:"paymentRequest"`
+	DonationRequest *KafkaProducerConfig `yaml:"donationRequest"`
 }
 
 type KafkaProducerConfig struct {

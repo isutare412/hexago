@@ -57,3 +57,9 @@ func (r *getUserResp) FromUser(user *entity.User) {
 	r.BirthMonth = int(user.Birth.Month())
 	r.BirthDay = user.Birth.Day()
 }
+
+type requestDonationReq struct {
+	DonatorId string `json:"donatorId"`
+	DonateeId string `json:"donateeId"`
+	Cents     int64  `json:"cents" example:"150"`
+}

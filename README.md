@@ -52,3 +52,4 @@ EOT
 ```
 
 3. Create kafka topics using [kafka-ui](http://localhost:58080).
+    - `donation-request`

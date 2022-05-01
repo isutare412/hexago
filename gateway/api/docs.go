@@ -16,6 +16,36 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/donations": {
+            "post": {
+                "description": "Request donation.",
+                "tags": [
+                    "Donation"
+                ],
+                "parameters": [
+                    {
+                        "description": "Donation request.",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.requestDonationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/http.errorResp"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "get": {
                 "description": "Get an user.",
@@ -175,6 +205,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "nickname": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.requestDonationReq": {
+            "type": "object",
+            "properties": {
+                "cents": {
+                    "type": "integer",
+                    "example": 150
+                },
+                "donateeId": {
+                    "type": "string"
+                },
+                "donatorId": {
                     "type": "string"
                 }
             }

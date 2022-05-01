@@ -22,8 +22,8 @@ kafka:
     - localhost:59092
     - localhost:59093
   topics:
-    paymentRequest:
-      topic: paymentRequest
+    donationRequest:
+      topic: donation-request
       username: user
       password: user
       maxRetry: 3

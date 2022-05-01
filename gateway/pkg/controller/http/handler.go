@@ -115,3 +115,45 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 		}
 	}
 }
+
+// @Tags		Donation
+// @Description	Request donation.
+// @Router		/api/v1/donations [post]
+// @Param		request	body	requestDonationReq	true "Donation request."
+// @Success		200
+// @Failure		default	{object}	errorResp
+func requestDonation(dSvc port.DonationService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		reqBytes, err := io.ReadAll(r.Body)
+		if err != nil {
+			logger.S().Error(err)
+			responseError(w, http.StatusInternalServerError, &errorResp{
+				Msg: "failed to read request body",
+			})
+			return
+		}
+
+		var req requestDonationReq
+		if err := json.Unmarshal(reqBytes, &req); err != nil {
+			logger.S().Error(err)
+			responseError(w, http.StatusBadRequest, &errorResp{
+				Msg: "request body does not follow required format",
+			})
+			return
+		}
+
+		err = dSvc.RequestDonation(
+			ctx, req.DonatorId, req.DonateeId, req.Cents)
+		if err != nil {
+			logger.S().With(
+				"donatorId", req.DonatorId,
+				"donateeId", req.DonateeId,
+				"cents", req.Cents,
+			).Error(err)
+			responseDomainError(w, err)
+			return
+		}
+	}
+}

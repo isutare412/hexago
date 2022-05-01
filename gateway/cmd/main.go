@@ -55,8 +55,8 @@ func runAndWait(ctx context.Context, components *components) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	paymentProducerFails := components.paymentProducer.Run(ctx)
-	logger.S().Infof("Run kafka payment producer")
+	donationProducerFails := components.donationProducer.Run(ctx)
+	logger.S().Infof("Run kafka donation producer")
 
 	httpServerFails := components.httpServer.Run(ctx)
 	logger.S().Infof("Run http server")
@@ -64,8 +64,8 @@ func runAndWait(ctx context.Context, components *components) {
 	signals := make(chan os.Signal, 3)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	select {
-	case err := <-paymentProducerFails:
-		logger.S().Errorf("Error from payment producer: %v", err)
+	case err := <-donationProducerFails:
+		logger.S().Errorf("Error from donation producer: %v", err)
 	case err := <-httpServerFails:
 		logger.S().Errorf("Error from http server: %v", err)
 	case sig := <-signals:
@@ -82,7 +82,7 @@ func shutdown(ctx context.Context, components *components) {
 		logger.S().Errorf("Failed to shutdown MongoDB: %v", err)
 	}
 
-	if err := components.paymentProducer.Shutdown(ctx); err != nil {
-		logger.S().Errorf("Failed to shutdown kafka payment producer: %v", err)
+	if err := components.donationProducer.Shutdown(ctx); err != nil {
+		logger.S().Errorf("Failed to shutdown kafka donation producer: %v", err)
 	}
 }

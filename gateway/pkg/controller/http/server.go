@@ -19,6 +19,7 @@ type Server struct {
 func NewServer(
 	cfg *config.HttpServerConfig,
 	uSvc port.UserService,
+	dSvc port.DonationService,
 ) *Server {
 	root := mux.NewRouter()
 	root.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
@@ -28,6 +29,7 @@ func NewServer(
 	api.HandleFunc("/users", createUser(uSvc)).Methods("POST")
 	api.HandleFunc("/users", getUser(uSvc)).Methods("GET")
 	api.HandleFunc("/users", deleteUser(uSvc)).Methods("DELETE")
+	api.HandleFunc("/donations", requestDonation(dSvc)).Methods("POST")
 
 	return &Server{
 		srv: &http.Server{

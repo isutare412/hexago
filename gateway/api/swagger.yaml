@@ -50,12 +50,41 @@ definitions:
       nickname:
         type: string
     type: object
+  http.requestDonationReq:
+    properties:
+      cents:
+        example: 150
+        type: integer
+      donateeId:
+        type: string
+      donatorId:
+        type: string
+    type: object
 info:
   contact: {}
   description: API gateway for Hexago project.
   title: Hexago API Gateway
   version: "0.1"
 paths:
+  /api/v1/donations:
+    post:
+      description: Request donation.
+      parameters:
+      - description: Donation request.
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/http.requestDonationReq'
+      responses:
+        "200":
+          description: ""
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/http.errorResp'
+      tags:
+      - Donation
   /api/v1/users:
     delete:
       description: Delete an user.
