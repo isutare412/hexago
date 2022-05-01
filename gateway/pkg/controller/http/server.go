@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	_ "github.com/isutare412/hexago/gateway/api"
 	"github.com/isutare412/hexago/gateway/pkg/config"
-	"github.com/isutare412/hexago/gateway/pkg/core/port"
+	"github.com/isutare412/hexago/gateway/pkg/port"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	pbPay "github.com/isutare412/hexago/common/pkg/pb/payment"
-	"github.com/isutare412/hexago/gateway/pkg/core/port"
+	"github.com/isutare412/hexago/gateway/pkg/port"
 )
 
 type Service struct {

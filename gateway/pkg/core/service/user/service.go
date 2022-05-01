@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	centity "github.com/isutare412/hexago/common/pkg/entity"
-	"github.com/isutare412/hexago/gateway/pkg/core/port"
+	"github.com/isutare412/hexago/gateway/pkg/port"
 )
 
 type Service struct {

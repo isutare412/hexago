@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/isutare412/hexago/gateway/pkg/core/port"
 	"github.com/isutare412/hexago/gateway/pkg/logger"
+	"github.com/isutare412/hexago/gateway/pkg/port"
 )
 
 // @Tags		User
