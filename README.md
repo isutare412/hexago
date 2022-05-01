@@ -13,6 +13,10 @@ Practice of hexagonal architecture tuned for Go.
 - [CQRS with Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 - [Go standard layout](https://github.com/golang-standards/project-layout)
 
+## Overview
+
+![Hexago CQRS diagram](assets/hexago-cqrs.drawio.png?raw=true)
+
 ## Modules
 
 ### [Hexago Gateway](./gateway)
