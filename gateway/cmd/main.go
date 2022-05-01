@@ -24,7 +24,7 @@ func main() {
 		panic(err)
 	}
 	logger.Initialize(cfg.Logger)
-	defer logger.S().Sync()
+	defer logger.Sync()
 
 	logger.S().Info("Start dependency injection")
 	startupCtx, cancel := context.WithTimeout(

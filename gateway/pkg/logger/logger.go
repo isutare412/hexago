@@ -50,6 +50,12 @@ func L() *zap.Logger {
 	return fastLogger
 }
 
+func Sync() {
+	fastLogger.Sync()
+	slowLogger.Sync()
+	accessLogger.Sync()
+}
+
 func textLoggerConfig() zap.Config {
 	cfg := zap.NewDevelopmentConfig()
 	cfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
