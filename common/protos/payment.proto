@@ -1,0 +1,10 @@
+syntax = "proto3";
+package payment;
+
+option go_package = "pkg/pb/payment";
+
+message DonationRequest {
+  string donatorId = 1;
+  string donateeId = 2;
+  int64 cents = 3;
+}

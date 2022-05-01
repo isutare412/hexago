@@ -22,6 +22,10 @@ API gateway module for hexago service.
 
 TBD.
 
+### [Hexago Common](./common)
+
+Includes common libraries of hexago modules.
+
 ## Infrastructure
 
 1. Run infrastructures using docker compose.
