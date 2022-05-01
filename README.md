@@ -24,7 +24,26 @@ TBD.
 
 ## Infrastructure
 
+1. Run infrastructures using docker compose.
+
 ```bash
-# Start infrastructures using docker-compose
 make infra
+# 1) up
+# 2) down
+# 3) ps
+# 4) logs
+# 5) quit
+# Please enter your choice: 1
 ```
+
+2. Add local dns to each insfrastructure for development.
+
+```bash
+sudo tee -a /etc/hosts > /dev/null <<EOT
+127.0.0.1 mongodb
+127.0.0.1 kafka1
+127.0.0.1 kafka2
+EOT
+```
+
+3. Create kafka topics using [kafka-ui](http://localhost:58080).

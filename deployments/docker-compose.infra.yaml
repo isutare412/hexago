@@ -1,26 +1,104 @@
 version: '3.8'
-
 networks:
   app-tier:
     driver: bridge
-
 volumes:
   mongo-volume:
     driver: local
-
+  zookeeper-volume:
+    driver: local
+  kafka1-volume:
+    driver: local
+  kafka2-volume:
+    driver: local
 services:
   mongodb:
     image: 'bitnami/mongodb:4.4.13'
     networks:
       - app-tier
     ports:
-      - ${MONGODB_PORT}:27017
+      - '27017:27017'
     volumes:
       - mongo-volume:/bitnami/mongodb
     environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb
-      - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_REPLICA_SET_NAME=replicaset
-      - MONGODB_REPLICA_SET_KEY=hexago
-      - MONGODB_ROOT_USER=${MONGODB_ROOT_USER}
-      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      MONGODB_ADVERTISED_HOSTNAME: mongodb
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_NAME: replicaset
+      MONGODB_REPLICA_SET_KEY: hexago
+      MONGODB_ROOT_USER: ${MONGODB_ROOT_USER}
+      MONGODB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+  zookeeper:
+    image: 'bitnami/zookeeper:3.8.0'
+    networks:
+      - app-tier
+    volumes:
+      - zookeeper-volume:/bitnami/zookeeper
+    environment:
+      ZOO_ENABLE_AUTH: 'yes'
+      ZOO_SERVER_USERS: ${ZOO_SERVER_USERS}
+      ZOO_SERVER_PASSWORDS: ${ZOO_SERVER_PASSWORDS}
+  kafka1:
+    image: 'bitnami/kafka:2.8.1'
+    networks:
+      - app-tier
+    ports:
+      - '59092:59092'
+    volumes:
+      - kafka1-volume:/bitnami/kafka
+    environment:
+      KAFKA_ZOOKEEPER_PROTOCOL: SASL
+      KAFKA_ZOOKEEPER_USER: ${KAFKA_ZOOKEEPER_USER}
+      KAFKA_ZOOKEEPER_PASSWORD: ${KAFKA_ZOOKEEPER_PASSWORD}
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SASL_PLAINTEXT,CLIENT:SASL_PLAINTEXT
+      KAFKA_CFG_LISTENERS: INTERNAL://0.0.0.0:9092,CLIENT://0.0.0.0:59092
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,CLIENT://kafka1:59092
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_INTER_BROKER_USER: ${KAFKA_INTER_BROKER_USER}
+      KAFKA_INTER_BROKER_PASSWORD: ${KAFKA_INTER_BROKER_PASSWORD}
+      KAFKA_CLIENT_USERS: ${KAFKA_CLIENT_USERS}
+      KAFKA_CLIENT_PASSWORDS: ${KAFKA_CLIENT_PASSWORDS}
+    depends_on:
+      - zookeeper
+  kafka2:
+    image: 'bitnami/kafka:2.8.1'
+    networks:
+      - app-tier
+    ports:
+      - '59093:59093'
+    volumes:
+      - kafka2-volume:/bitnami/kafka
+    environment:
+      KAFKA_ZOOKEEPER_PROTOCOL: SASL
+      KAFKA_ZOOKEEPER_USER: ${KAFKA_ZOOKEEPER_USER}
+      KAFKA_ZOOKEEPER_PASSWORD: ${KAFKA_ZOOKEEPER_PASSWORD}
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:SASL_PLAINTEXT,CLIENT:SASL_PLAINTEXT
+      KAFKA_CFG_LISTENERS: INTERNAL://0.0.0.0:9093,CLIENT://0.0.0.0:59093
+      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka2:9093,CLIENT://kafka2:59093
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_INTER_BROKER_USER: ${KAFKA_INTER_BROKER_USER}
+      KAFKA_INTER_BROKER_PASSWORD: ${KAFKA_INTER_BROKER_PASSWORD}
+      KAFKA_CLIENT_USERS: ${KAFKA_CLIENT_USERS}
+      KAFKA_CLIENT_PASSWORDS: ${KAFKA_CLIENT_PASSWORDS}
+    depends_on:
+      - zookeeper
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    networks:
+      - app-tier
+    ports:
+      - '58080:8080'
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092,kafka2:9093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: PLAIN
+      KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_INTER_BROKER_USER}" password="${KAFKA_INTER_BROKER_PASSWORD}";'
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
