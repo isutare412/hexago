@@ -8,6 +8,7 @@ Practice of hexagonal architecture tuned for Go.
   + `pkg/controller`: Primary adapters
   + `pkg/infrastructure`: Secondary adapters
   + `pkg/core`: Cores
+- [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design)
 - [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
 - [CQRS with Event Sourcing](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 - [Go standard layout](https://github.com/golang-standards/project-layout)
