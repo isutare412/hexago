@@ -17,9 +17,13 @@ definitions:
         type: string
       givenName:
         type: string
+      id:
+        example: isutare412
+        type: string
       middleName:
         type: string
       nickname:
+        example: redshore
         type: string
     type: object
   http.errorResp:
@@ -45,9 +49,13 @@ definitions:
         type: string
       givenName:
         type: string
+      id:
+        example: isutare412
+        type: string
       middleName:
         type: string
       nickname:
+        example: redshore
         type: string
     type: object
   http.requestDonationReq:
@@ -89,12 +97,12 @@ paths:
     delete:
       description: Delete an user.
       parameters:
-      - description: Contents provider id.
+      - description: Id of user.
         in: query
-        name: email
+        name: id
         required: true
         type: string
-        x-example: foo@bar.com
+        x-example: isutare412
       responses:
         "200":
           description: ""
@@ -107,12 +115,12 @@ paths:
     get:
       description: Get an user.
       parameters:
-      - description: Contents provider id.
+      - description: Id of user.
         in: query
-        name: email
+        name: id
         required: true
         type: string
-        x-example: foo@bar.com
+        x-example: isutare412
       responses:
         "200":
           description: OK

@@ -28,11 +28,11 @@ func (s *Service) RequestDonation(
 	donatorId, donateeId string,
 	cents int64,
 ) error {
-	_, err := s.userRepo.FindUserByEmail(ctx, donatorId)
+	_, err := s.userRepo.FindUserById(ctx, donatorId)
 	if err != nil {
 		return fmt.Errorf("finding donator: %w", err)
 	}
-	_, err = s.userRepo.FindUserByEmail(ctx, donateeId)
+	_, err = s.userRepo.FindUserById(ctx, donateeId)
 	if err != nil {
 		return fmt.Errorf("finding donatee: %w", err)
 	}

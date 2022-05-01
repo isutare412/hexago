@@ -55,9 +55,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "x-example": "foo@bar.com",
-                        "description": "Contents provider id.",
-                        "name": "email",
+                        "x-example": "isutare412",
+                        "description": "Id of user.",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -113,9 +113,9 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "x-example": "foo@bar.com",
-                        "description": "Contents provider id.",
-                        "name": "email",
+                        "x-example": "isutare412",
+                        "description": "Id of user.",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -160,11 +160,16 @@ const docTemplate = `{
                 "givenName": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string",
+                    "example": "isutare412"
+                },
                 "middleName": {
                     "type": "string"
                 },
                 "nickname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "redshore"
                 }
             }
         },
@@ -201,11 +206,16 @@ const docTemplate = `{
                 "givenName": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string",
+                    "example": "isutare412"
+                },
                 "middleName": {
                     "type": "string"
                 },
                 "nickname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "redshore"
                 }
             }
         },

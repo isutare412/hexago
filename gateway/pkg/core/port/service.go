@@ -3,13 +3,13 @@ package port
 import (
 	"context"
 
-	"github.com/isutare412/hexago/gateway/pkg/core/entity"
+	centity "github.com/isutare412/hexago/common/pkg/entity"
 )
 
 type UserService interface {
-	Create(ctx context.Context, user *entity.User) error
-	GetByEmail(ctx context.Context, email string) (*entity.User, error)
-	DeleteByEmail(ctx context.Context, email string) error
+	Create(ctx context.Context, user *centity.User) error
+	GetById(ctx context.Context, id string) (*centity.User, error)
+	DeleteById(ctx context.Context, id string) error
 }
 
 type DonationService interface {

@@ -3,7 +3,7 @@ package http
 import (
 	"time"
 
-	"github.com/isutare412/hexago/gateway/pkg/core/entity"
+	centity "github.com/isutare412/hexago/common/pkg/entity"
 )
 
 type errorResp struct {
@@ -11,8 +11,9 @@ type errorResp struct {
 }
 
 type createUserReq struct {
+	Id         string `json:"id" example:"isutare412"`
 	Email      string `json:"email" example:"foo@bar.com"`
-	Nickname   string `json:"nickname"`
+	Nickname   string `json:"nickname" example:"redshore"`
 	GivenName  string `json:"givenName"`
 	MiddleName string `json:"middleName"`
 	FamilyName string `json:"familyName"`
@@ -21,12 +22,13 @@ type createUserReq struct {
 	BirthDay   int    `json:"birthDay" example:"25"`
 }
 
-func (r *createUserReq) IntoUser() *entity.User {
+func (r *createUserReq) IntoUser() *centity.User {
 	birth := time.Date(
 		r.BirthYear, time.Month(r.BirthMonth), r.BirthDay, 0, 0, 0, 0,
 		time.UTC)
 
-	return &entity.User{
+	return &centity.User{
+		Id:         r.Id,
 		Email:      r.Email,
 		Nickname:   r.Nickname,
 		GivenName:  r.GivenName,
@@ -37,8 +39,9 @@ func (r *createUserReq) IntoUser() *entity.User {
 }
 
 type getUserResp struct {
+	Id         string `json:"id" example:"isutare412"`
 	Email      string `json:"email" example:"foo@bar.com"`
-	Nickname   string `json:"nickname"`
+	Nickname   string `json:"nickname" example:"redshore"`
 	GivenName  string `json:"givenName"`
 	MiddleName string `json:"middleName"`
 	FamilyName string `json:"familyName"`
@@ -47,7 +50,8 @@ type getUserResp struct {
 	BirthDay   int    `json:"birthDay" example:"25"`
 }
 
-func (r *getUserResp) FromUser(user *entity.User) {
+func (r *getUserResp) FromUser(user *centity.User) {
+	r.Id = user.Id
 	r.Email = user.Email
 	r.Nickname = user.Nickname
 	r.GivenName = user.GivenName

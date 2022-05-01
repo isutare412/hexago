@@ -13,7 +13,7 @@ import (
 // @Tags		User
 // @Description	Create an user.
 // @Router		/api/v1/users [post]
-// @Param		request	body	createUserReq	true "Request to create user."
+// @Param		request	body	createUserReq	true	"Request to create user."
 // @Success		200
 // @Failure		default	{object}	errorResp
 func createUser(uSvc port.UserService) http.HandlerFunc {
@@ -41,6 +41,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 		user := req.IntoUser()
 		if err := uSvc.Create(ctx, user); err != nil {
 			logger.S().With(
+				"id", user.Id,
 				"email", user.Email,
 			).Error(err)
 			responseDomainError(w, err)
@@ -52,7 +53,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 // @Tags		User
 // @Description	Get an user.
 // @Router		/api/v1/users [get]
-// @Param		email	query	string	true "Contents provider id." extensions(x-example=foo@bar.com)
+// @Param		id	query	string	true	"Id of user."	extensions(x-example=isutare412)
 // @Success		200		{object}	getUserResp
 // @Failure		default	{object}	errorResp
 func getUser(uSvc port.UserService) http.HandlerFunc {
@@ -60,9 +61,9 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 		ctx := r.Context()
 
 		queryParams := r.URL.Query()
-		email := queryParams.Get("email")
-		if email == "" {
-			err := fmt.Errorf("need 'email' query parameter")
+		id := queryParams.Get("id")
+		if id == "" {
+			err := fmt.Errorf("need 'id' query parameter")
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
 				Msg: err.Error(),
@@ -70,10 +71,10 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 			return
 		}
 
-		user, err := uSvc.GetByEmail(ctx, email)
+		user, err := uSvc.GetById(ctx, id)
 		if err != nil {
 			logger.S().With(
-				"email", email,
+				"id", id,
 			).Error(err)
 			responseDomainError(w, err)
 			return
@@ -88,7 +89,7 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 // @Tags		User
 // @Description	Delete an user.
 // @Router		/api/v1/users [delete]
-// @Param		email	query	string	true "Contents provider id." extensions(x-example=foo@bar.com)
+// @Param		id	query	string	true	"Id of user."	extensions(x-example=isutare412)
 // @Success		200
 // @Failure		default	{object}	errorResp
 func deleteUser(uSvc port.UserService) http.HandlerFunc {
@@ -96,9 +97,9 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 		ctx := r.Context()
 
 		queryParams := r.URL.Query()
-		email := queryParams.Get("email")
-		if email == "" {
-			err := fmt.Errorf("need 'email' query parameter")
+		id := queryParams.Get("id")
+		if id == "" {
+			err := fmt.Errorf("need 'id' query parameter")
 			logger.S().Error(err)
 			responseError(w, http.StatusBadRequest, &errorResp{
 				Msg: err.Error(),
@@ -106,9 +107,9 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 			return
 		}
 
-		if err := uSvc.DeleteByEmail(ctx, email); err != nil {
+		if err := uSvc.DeleteById(ctx, id); err != nil {
 			logger.S().With(
-				"email", email,
+				"id", id,
 			).Error(err)
 			responseDomainError(w, err)
 			return
@@ -119,7 +120,7 @@ func deleteUser(uSvc port.UserService) http.HandlerFunc {
 // @Tags		Donation
 // @Description	Request donation.
 // @Router		/api/v1/donations [post]
-// @Param		request	body	requestDonationReq	true "Donation request."
+// @Param		request	body	requestDonationReq	true	"Donation request."
 // @Success		200
 // @Failure		default	{object}	errorResp
 func requestDonation(dSvc port.DonationService) http.HandlerFunc {

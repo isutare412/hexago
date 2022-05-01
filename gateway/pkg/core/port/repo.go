@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	"github.com/isutare412/hexago/gateway/pkg/core/entity"
+	centity "github.com/isutare412/hexago/common/pkg/entity"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -13,7 +13,7 @@ type Sessional interface {
 
 type UserRepo interface {
 	Sessional
-	InsertUser(ctx context.Context, user *entity.User) error
-	FindUserByEmail(ctx context.Context, email string) (*entity.User, error)
-	DeleteUserByEmail(ctx context.Context, email string) error
+	InsertUser(ctx context.Context, user *centity.User) error
+	FindUserById(ctx context.Context, id string) (*centity.User, error)
+	DeleteUserById(ctx context.Context, id string) error
 }

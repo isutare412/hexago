@@ -7,6 +7,7 @@ POST {{url}}/api/v1/users
 Content-Type: application/json
 
 {
+  "id": "someid01",
   "email": "foo@hexago.com",
   "nickname": "redshore",
   "givenName": "Suhyuk",
@@ -19,13 +20,13 @@ Content-Type: application/json
 ################################################################################
 # Get user
 ################################################################################
-GET {{url}}/api/v1/users?email=foo@bar.com
+GET {{url}}/api/v1/users?id=someid01
 Content-Type: application/json
 
 ################################################################################
 # Delete user
 ################################################################################
-DELETE {{url}}/api/v1/users?email=foo@bar.com
+DELETE {{url}}/api/v1/users?id=someid01
 Content-Type: application/json
 
 ################################################################################
@@ -35,7 +36,7 @@ POST {{url}}/api/v1/donations
 Content-Type: application/json
 
 {
-  "donatorId": "foo@hexago.com",
-  "donateeId": "bar@hexago.com",
+  "donatorId": "someid01",
+  "donateeId": "someid02",
   "cents": 240
 }
