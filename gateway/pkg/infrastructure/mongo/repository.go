@@ -50,20 +50,6 @@ func NewRepository(
 	}, nil
 }
 
-func (r *Repository) StartSession(
-	ctx context.Context,
-) (mongo.SessionContext, error) {
-	sess, err := r.cli.StartSession()
-	if err != nil {
-		return nil, fmt.Errorf("start session: %w", err)
-	}
-	if err := sess.StartTransaction(); err != nil {
-		return nil, fmt.Errorf("start trasaction: %w", err)
-	}
-
-	return mongo.NewSessionContext(ctx, sess), nil
-}
-
 func (r *Repository) Shutdown(ctx context.Context) error {
 	return r.cli.Disconnect(ctx)
 }
