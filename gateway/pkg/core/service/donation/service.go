@@ -9,12 +9,12 @@ import (
 )
 
 type Service struct {
-	userRepo port.UserRepo
+	userRepo port.UserRepository
 	payMq    port.PaymentMessageQueue
 }
 
 func NewService(
-	userRepo port.UserRepo,
+	userRepo port.UserRepository,
 	payMq port.PaymentMessageQueue,
 ) *Service {
 	return &Service{

@@ -1,4 +1,4 @@
-package repo
+package mongo
 
 const (
 	collUser = "users"

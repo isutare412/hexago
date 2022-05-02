@@ -11,7 +11,7 @@ type Sessional interface {
 	StartSession(context.Context) (mongo.SessionContext, error)
 }
 
-type UserRepo interface {
+type UserRepository interface {
 	Sessional
 	InsertUser(ctx context.Context, user *centity.User) error
 	FindUserById(ctx context.Context, id string) (*centity.User, error)

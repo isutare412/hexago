@@ -1,4 +1,4 @@
-package repo
+package mongo
 
 import (
 	"context"
@@ -26,10 +26,10 @@ func TestMongoUserRepo(t *testing.T) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	mongoRepo, err := NewMongoDB(ctx, cfg.MongoDB)
+	repo, err := NewRepository(ctx, cfg.MongoDB)
 	assert.NoError(t, err)
 
-	err = mongoRepo.InsertUser(ctx, &centity.User{
+	err = repo.InsertUser(ctx, &centity.User{
 		Id:         id,
 		Email:      email,
 		Nickname:   nickname,
@@ -39,14 +39,14 @@ func TestMongoUserRepo(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	user, err := mongoRepo.FindUserById(ctx, id)
+	user, err := repo.FindUserById(ctx, id)
 	assert.NoError(t, err)
 	assert.Equal(t, user.Id, id)
 	assert.Equal(t, user.Email, email)
 	assert.Equal(t, user.Nickname, nickname)
 	assert.Equal(t, user.Birth, birthDate)
 
-	err = mongoRepo.DeleteUserById(ctx, id)
+	err = repo.DeleteUserById(ctx, id)
 	assert.NoError(t, err)
 }
 

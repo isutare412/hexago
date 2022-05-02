@@ -1,4 +1,4 @@
-package repo
+package mongo
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (mdb *MongoDB) InsertUser(
+func (r *Repository) InsertUser(
 	ctx context.Context,
 	user *centity.User,
 ) error {
-	coll := mdb.db.Collection(collUser)
+	coll := r.db.Collection(collUser)
 
 	_, err := coll.InsertOne(ctx, user)
 	if isErrDupKey(err) {
@@ -28,11 +28,11 @@ func (mdb *MongoDB) InsertUser(
 	return nil
 }
 
-func (mdb *MongoDB) FindUserById(
+func (r *Repository) FindUserById(
 	ctx context.Context,
 	id string,
 ) (*centity.User, error) {
-	coll := mdb.db.Collection(collUser)
+	coll := r.db.Collection(collUser)
 
 	filter := bson.D{primitive.E{Key: "id", Value: id}}
 	res := coll.FindOne(ctx, filter)
@@ -53,11 +53,11 @@ func (mdb *MongoDB) FindUserById(
 	return &user, nil
 }
 
-func (mdb *MongoDB) DeleteUserById(
+func (r *Repository) DeleteUserById(
 	ctx context.Context,
 	id string,
 ) error {
-	coll := mdb.db.Collection(collUser)
+	coll := r.db.Collection(collUser)
 
 	filter := bson.D{primitive.E{Key: "id", Value: id}}
 	res, err := coll.DeleteOne(ctx, filter)

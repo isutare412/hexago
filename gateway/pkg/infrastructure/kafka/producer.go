@@ -1,4 +1,4 @@
-package mq
+package kafka
 
 import (
 	"context"
@@ -12,15 +12,15 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type KafkaProducer struct {
+type Producer struct {
 	cli   sarama.AsyncProducer
 	topic string
 }
 
-func NewKafkaProducer(
+func NewProducer(
 	kCfg *config.KafkaConfig,
 	pCfg *config.KafkaProducerConfig,
-) (*KafkaProducer, error) {
+) (*Producer, error) {
 	sCfg := newSaslPlainConfig(pCfg.Username, pCfg.Password)
 	sCfg.ClientID = kafkaClientId
 	sCfg.Producer.RequiredAcks = sarama.WaitForLocal
@@ -33,13 +33,13 @@ func NewKafkaProducer(
 		return nil, fmt.Errorf("creating kafka async producer: %w", err)
 	}
 
-	return &KafkaProducer{
+	return &Producer{
 		cli:   client,
 		topic: pCfg.Topic,
 	}, nil
 }
 
-func (p *KafkaProducer) Run(ctx context.Context) <-chan error {
+func (p *Producer) Run(ctx context.Context) <-chan error {
 	fails := make(chan error, 1)
 	once := sync.Once{}
 	go func() {
@@ -56,7 +56,7 @@ func (p *KafkaProducer) Run(ctx context.Context) <-chan error {
 	return fails
 }
 
-func (p *KafkaProducer) Shutdown(ctx context.Context) error {
+func (p *Producer) Shutdown(ctx context.Context) error {
 	closeDone := make(chan struct{})
 	closeFail := make(chan error)
 	defer close(closeFail)
@@ -79,7 +79,7 @@ func (p *KafkaProducer) Shutdown(ctx context.Context) error {
 	return nil
 }
 
-func (p *KafkaProducer) SendDonationRequest(req *pbPay.DonationRequest) error {
+func (p *Producer) SendDonationRequest(req *pbPay.DonationRequest) error {
 	reqBytes, err := proto.Marshal(req)
 	if err != nil {
 		return fmt.Errorf("marshaling donation request: %w", err)

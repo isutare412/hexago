@@ -1,4 +1,4 @@
-package repo
+package mongo
 
 import (
 	"context"
@@ -13,15 +13,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type MongoDB struct {
+type Repository struct {
 	cli *mongo.Client
 	db  *mongo.Database
 }
 
-func NewMongoDB(
+func NewRepository(
 	ctx context.Context,
 	cfg *config.MongoDBConfig,
-) (*MongoDB, error) {
+) (*Repository, error) {
 	heartbeat := time.Duration(cfg.HeartbeatInterval)
 	addrs := strings.Join(cfg.Addrs, ",")
 	uri := fmt.Sprintf("mongodb://%s", addrs)
@@ -44,16 +44,16 @@ func NewMongoDB(
 		return nil, fmt.Errorf("ping MongoDB: %w", err)
 	}
 
-	return &MongoDB{
+	return &Repository{
 		cli: cli,
 		db:  cli.Database(cfg.Database),
 	}, nil
 }
 
-func (mdb *MongoDB) StartSession(
+func (r *Repository) StartSession(
 	ctx context.Context,
 ) (mongo.SessionContext, error) {
-	sess, err := mdb.cli.StartSession()
+	sess, err := r.cli.StartSession()
 	if err != nil {
 		return nil, fmt.Errorf("start session: %w", err)
 	}
@@ -64,12 +64,12 @@ func (mdb *MongoDB) StartSession(
 	return mongo.NewSessionContext(ctx, sess), nil
 }
 
-func (mdb *MongoDB) Shutdown(ctx context.Context) error {
-	return mdb.cli.Disconnect(ctx)
+func (r *Repository) Shutdown(ctx context.Context) error {
+	return r.cli.Disconnect(ctx)
 }
 
-func (mdb *MongoDB) Migrate(ctx context.Context) error {
-	_, err := mdb.db.Collection(collUser).Indexes().
+func (r *Repository) Migrate(ctx context.Context) error {
+	_, err := r.db.Collection(collUser).Indexes().
 		CreateMany(ctx, []mongo.IndexModel{
 			{
 				Keys:    bson.M{"id": 1},

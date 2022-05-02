@@ -8,13 +8,13 @@ import (
 	"github.com/isutare412/hexago/gateway/pkg/controller/http"
 	"github.com/isutare412/hexago/gateway/pkg/core/service/donation"
 	"github.com/isutare412/hexago/gateway/pkg/core/service/user"
-	"github.com/isutare412/hexago/gateway/pkg/infrastructure/mq"
-	"github.com/isutare412/hexago/gateway/pkg/infrastructure/repo"
+	"github.com/isutare412/hexago/gateway/pkg/infrastructure/kafka"
+	"github.com/isutare412/hexago/gateway/pkg/infrastructure/mongo"
 )
 
 type components struct {
-	mongoRepo        *repo.MongoDB
-	donationProducer *mq.KafkaProducer
+	mongoRepo        *mongo.Repository
+	donationProducer *kafka.Producer
 	userService      *user.Service
 	donationService  *donation.Service
 	httpServer       *http.Server
@@ -30,22 +30,29 @@ func dependencyInjection(
 	defer close(diFail)
 
 	go func() {
-		mongoRepo, err := repo.NewMongoDB(ctx, cfg.MongoDB)
+		mongoRepo, err := mongo.NewRepository(ctx, cfg.MongoDB)
 		if err != nil {
 			diFail <- err
 			return
 		}
 
-		donationProducer, err := mq.NewKafkaProducer(cfg.Kafka, cfg.Kafka.Topics.DonationRequest)
+		donationProducer, err := kafka.NewProducer(
+			cfg.Kafka,
+			cfg.Kafka.Topics.DonationRequest)
 		if err != nil {
 			diFail <- err
 			return
 		}
 
 		userService := user.NewService(mongoRepo)
-		donationService := donation.NewService(mongoRepo, donationProducer)
+		donationService := donation.NewService(
+			mongoRepo,
+			donationProducer)
 
-		httpServer := http.NewServer(cfg.Server.Http, userService, donationService)
+		httpServer := http.NewServer(
+			cfg.Server.Http,
+			userService,
+			donationService)
 
 		diDone <- &components{
 			mongoRepo:        mongoRepo,
