@@ -18,6 +18,7 @@ type Producer struct {
 }
 
 func NewProducer(
+	ctx context.Context,
 	kCfg *config.KafkaConfig,
 	pCfg *config.KafkaProducerConfig,
 ) (*Producer, error) {
@@ -28,15 +29,32 @@ func NewProducer(
 	sCfg.Producer.Return.Successes = false
 	sCfg.Producer.Return.Errors = true
 
-	client, err := sarama.NewAsyncProducer(kCfg.Addrs, sCfg)
-	if err != nil {
-		return nil, fmt.Errorf("creating kafka async producer: %w", err)
-	}
+	done := make(chan *Producer)
+	fail := make(chan error)
+	go func() {
+		defer close(done)
+		defer close(fail)
 
-	return &Producer{
-		cli:   client,
-		topic: pCfg.Topic,
-	}, nil
+		client, err := sarama.NewAsyncProducer(kCfg.Addrs, sCfg)
+		if err != nil {
+			fail <- fmt.Errorf("creating kafka async producer: %w", err)
+			return
+		}
+
+		done <- &Producer{
+			cli:   client,
+			topic: pCfg.Topic,
+		}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return nil, fmt.Errorf("new kafka producer timeout")
+	case err := <-fail:
+		return nil, err
+	case p := <-done:
+		return p, nil
+	}
 }
 
 func (p *Producer) Run(ctx context.Context) <-chan error {

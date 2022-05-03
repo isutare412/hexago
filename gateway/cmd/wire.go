@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/isutare412/hexago/gateway/pkg/config"
 	"github.com/isutare412/hexago/gateway/pkg/controller/http"
@@ -24,51 +23,34 @@ func dependencyInjection(
 	ctx context.Context,
 	cfg *config.Config,
 ) (*components, error) {
-	diDone := make(chan *components)
-	diFail := make(chan error)
-	defer close(diDone)
-	defer close(diFail)
-
-	go func() {
-		mongoRepo, err := mongo.NewRepository(ctx, cfg.MongoDB)
-		if err != nil {
-			diFail <- err
-			return
-		}
-
-		donationProducer, err := kafka.NewProducer(
-			cfg.Kafka,
-			cfg.Kafka.Topics.DonationRequest)
-		if err != nil {
-			diFail <- err
-			return
-		}
-
-		userService := user.NewService(mongoRepo)
-		donationService := donation.NewService(
-			mongoRepo,
-			donationProducer)
-
-		httpServer := http.NewServer(
-			cfg.Server.Http,
-			userService,
-			donationService)
-
-		diDone <- &components{
-			mongoRepo:        mongoRepo,
-			donationProducer: donationProducer,
-			userService:      userService,
-			donationService:  donationService,
-			httpServer:       httpServer,
-		}
-	}()
-
-	select {
-	case <-ctx.Done():
-		return nil, fmt.Errorf("dependency injection timeout")
-	case err := <-diFail:
+	mongoRepo, err := mongo.NewRepository(ctx, cfg.MongoDB)
+	if err != nil {
 		return nil, err
-	case c := <-diDone:
-		return c, nil
 	}
+
+	donationProducer, err := kafka.NewProducer(
+		ctx,
+		cfg.Kafka,
+		cfg.Kafka.Topics.DonationRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	userService := user.NewService(mongoRepo)
+	donationService := donation.NewService(
+		mongoRepo,
+		donationProducer)
+
+	httpServer := http.NewServer(
+		cfg.Server.Http,
+		userService,
+		donationService)
+
+	return &components{
+		mongoRepo:        mongoRepo,
+		donationProducer: donationProducer,
+		userService:      userService,
+		donationService:  donationService,
+		httpServer:       httpServer,
+	}, nil
 }
