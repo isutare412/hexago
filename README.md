@@ -1,6 +1,7 @@
 # Hexago
 
-Practice of hexagonal architecture tuned for Go.
+System architecture PoC tuned for Go. The name Hexago was taken from Hexagonal
+Architecture.
 
 ## Considerations
 
