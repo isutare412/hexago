@@ -4,3 +4,12 @@ logger:
 timeout:
   startup: 10 # seconds
   shutdown: 30 # seconds
+mongodb:
+  addrs:
+    - localhost:27017
+  database: hexago
+  authSource: admin
+  username: root
+  password: root
+  heartbeatInterval: 15000 # milliseconds
+  maxConnectionPool: 50
