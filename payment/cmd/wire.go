@@ -4,13 +4,16 @@ import (
 	"context"
 
 	"github.com/isutare412/hexago/payment/pkg/config"
+	"github.com/isutare412/hexago/payment/pkg/controller/mq"
 	"github.com/isutare412/hexago/payment/pkg/core/service/donation"
+	"github.com/isutare412/hexago/payment/pkg/infrastructure/kafka"
 	"github.com/isutare412/hexago/payment/pkg/infrastructure/mongo"
 )
 
 type Components struct {
-	mongoRepo       *mongo.Repository
-	donationService *donation.Service
+	mongoRepo        *mongo.Repository
+	donationConsumer *kafka.Consumer
+	donationService  *donation.Service
 }
 
 func dependencyInjection(
@@ -24,8 +27,21 @@ func dependencyInjection(
 
 	donationService := donation.NewService(mongoRepo)
 
+	donationHandler := mq.NewDonationHandler(
+		cfg.Kafka.Topics.DonationRequest,
+		donationService)
+	donationConsumer, err := kafka.NewConsumer(
+		ctx,
+		cfg.Kafka,
+		cfg.Kafka.Topics.DonationRequest,
+		donationHandler)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Components{
-		mongoRepo:       mongoRepo,
-		donationService: donationService,
+		mongoRepo:        mongoRepo,
+		donationConsumer: donationConsumer,
+		donationService:  donationService,
 	}, nil
 }

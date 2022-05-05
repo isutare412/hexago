@@ -13,3 +13,14 @@ mongodb:
   password: root
   heartbeatInterval: 15000 # milliseconds
   maxConnectionPool: 50
+kafka:
+  addrs:
+    - localhost:59092
+    - localhost:59093
+  topics:
+    donationRequest:
+      topic: donation-request
+      username: user
+      password: user
+      group: donation-request-payment
+      timeout: 30 # seconds

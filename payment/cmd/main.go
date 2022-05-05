@@ -4,6 +4,9 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/isutare412/hexago/payment/pkg/config"
@@ -39,6 +42,9 @@ func main() {
 	}
 	logger.S().Info("Done initialization")
 
+	appCtx := context.Background()
+	runAndWait(appCtx, components)
+
 	shutdownCtx, cancel := context.WithTimeout(
 		context.Background(),
 		time.Duration(cfg.Timeout.Shutdown)*time.Second)
@@ -56,7 +62,28 @@ func initialize(ctx context.Context, components *Components) error {
 	return nil
 }
 
+func runAndWait(ctx context.Context, components *Components) {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	donationConsumerFails := components.donationConsumer.Run(ctx)
+	logger.S().Info("Run kafka donation consumer")
+
+	signals := make(chan os.Signal, 3)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	select {
+	case err := <-donationConsumerFails:
+		logger.S().Errorf("Error from donation consumer: %v", err)
+	case sig := <-signals:
+		logger.S().Infof("Caught signal[%s]", sig.String())
+	}
+}
+
 func shutdown(ctx context.Context, components *Components) {
+	if err := components.donationConsumer.Shutdown(ctx); err != nil {
+		logger.S().Errorf("Failed to shutdown kafka donation consumer: %v", err)
+	}
+
 	if err := components.mongoRepo.Shutdown(ctx); err != nil {
 		logger.S().Errorf("Failed to shutdown MongoDB: %v", err)
 	}
