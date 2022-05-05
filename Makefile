@@ -13,3 +13,29 @@ help: ## Display this help.
 .PHONY: infra
 infra: ## Docker compose entrypoint of infra.
 	@./scripts/compose_infra.sh
+
+##@ Applications
+
+.PHONY: image-gateway
+image-gateway: ## Build docker image of hexago gateway.
+	$(MAKE) -C gateway image
+
+.PHONY: image-payment
+image-payment: ## Build docker image of hexago payment.
+	$(MAKE) -C payment image
+
+.PHONY: run-gateway
+run-gateway: ## Run docker image of hexago gateway.
+	$(MAKE) -C gateway run-docker
+
+.PHONY: run-payment
+run-payment: ## Run docker image of hexago payment.
+	$(MAKE) -C payment run-docker
+
+.PHONY: stop-gateway
+stop-gateway: ## Stop docker image of hexago gateway.
+	$(MAKE) -C gateway stop-docker
+
+.PHONY: stop-payment
+stop-payment: ## Stop docker image of hexago payment.
+	$(MAKE) -C payment stop-docker

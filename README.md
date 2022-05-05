@@ -46,7 +46,8 @@ make infra
 # Please enter your choice: 1
 ```
 
-2. Add local dns to each insfrastructure for development.
+2. Add local dns to each insfrastructure for local development. Optional for
+docker environment.
 
 ```bash
 sudo tee -a /etc/hosts > /dev/null <<EOT
@@ -58,3 +59,28 @@ EOT
 
 3. Create kafka topics using [kafka-ui](http://localhost:58080).
     - `donation-request`
+
+## Test Drive
+
+1. Prepare infrastructures [above](#infrastructure).
+
+2. Build hexago modules.
+
+```bash
+make image-gateway
+make image-payment
+```
+
+3. Run hexago modules.
+
+```bash
+make run-gateway
+make run-payment
+```
+
+4. Stop hexago modules.
+
+```bash
+make stop-gateway
+make stop-payment
+```

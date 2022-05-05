@@ -11,7 +11,7 @@ TAG ?= v0.1.0
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-##@ Deployment
+##@ Docker
 
 .PHONY: image
 image: ## Build server image.
@@ -20,6 +20,18 @@ image: ## Build server image.
 		-f deployments/arm64.Dockerfile \
 		-t ${IMG}:${TAG} \
 		.
+
+.PHONY: run-docker
+run-docker: ## Run server in docker.
+	@docker run --rm -d \
+		--name hexago-gateway \
+		--network hexago_app-tier \
+		-p 8080:8080 \
+		${IMG}:${TAG}
+
+.PHONY: stop-docker
+stop-docker: ## Stop server in docker.
+	@docker stop hexago-gateway
 
 ##@ Development
 
@@ -41,15 +53,3 @@ test: ## Run go test.
 .PHONY: run-local
 run-local: ## Run server locally.
 	@go run ./cmd/main.go ./cmd/wire.go
-
-.PHONY: run-docker
-run-docker: ## Run server in docker.
-	@docker run --rm -d \
-		--name hexago-gateway \
-		--network hexago_app-tier \
-		-p 8080:8080 \
-		${IMG}:${TAG}
-
-.PHONY: stop-docker
-stop-docker: ## Stop server in docker.
-	@docker stop hexago-gateway
