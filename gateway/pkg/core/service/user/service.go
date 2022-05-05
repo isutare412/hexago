@@ -19,6 +19,9 @@ func NewService(userRepo port.UserRepository) *Service {
 }
 
 func (s *Service) Create(ctx context.Context, user *centity.User) error {
+	user.DonatedFrom = make([]*centity.DonateRelation, 0)
+	user.DonatedTo = make([]*centity.DonateRelation, 0)
+
 	if err := s.userRepo.InsertUser(ctx, user); err != nil {
 		return fmt.Errorf("inserting user: %w", err)
 	}
