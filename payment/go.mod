@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/Shopify/sarama v1.32.0
-	github.com/isutare412/hexago/common v0.0.0
+	github.com/isutare412/hexago/common v0.0.0-20220505071114-f256e165ff80
 	github.com/spf13/viper v1.11.0
 	go.mongodb.org/mongo-driver v1.9.1
 	go.uber.org/zap v1.21.0
@@ -54,5 +54,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
-
-replace github.com/isutare412/hexago/common => ../common
