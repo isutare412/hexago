@@ -78,7 +78,11 @@ make run-gateway
 make run-payment
 ```
 
-4. Stop hexago modules.
+4. Test scenarios.
+   - [Swagger UI](http://localhost:8080/swagger/index.html)
+   - [Detailed scenarios](./scenarios/)
+
+5. Stop hexago modules.
 
 ```bash
 make stop-gateway
