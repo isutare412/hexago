@@ -9,6 +9,7 @@ import (
 	"github.com/isutare412/hexago/payment/pkg/config"
 	"github.com/isutare412/hexago/payment/pkg/logger"
 	"github.com/isutare412/hexago/payment/pkg/port"
+	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -71,9 +72,9 @@ func (h *DonationHandler) handleMessage(
 		).Error(err)
 	}
 
-	logger.S().With(
-		"donatorId", req.DonatorId,
-		"donateeId", req.DonateeId,
-		"cents", req.Cents,
+	logger.A().With(
+		zap.String("donatorId", req.DonatorId),
+		zap.String("donateeId", req.DonateeId),
+		zap.Int64("cents", req.Cents),
 	).Info("Handled donation request")
 }
