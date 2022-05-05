@@ -10,7 +10,7 @@ server:
     port: 8080
 mongodb:
   addrs:
-    - localhost:27017
+    - mongodb:27017
   database: hexago
   authSource: admin
   username: root
@@ -19,8 +19,8 @@ mongodb:
   maxConnectionPool: 50
 kafka:
   addrs:
-    - localhost:59092
-    - localhost:59093
+    - kafka1:59092
+    - kafka2:59093
   topics:
     donationRequest:
       topic: donation-request
