@@ -53,7 +53,7 @@ func createUser(uSvc port.UserService) http.HandlerFunc {
 // @Tags		User
 // @Description	Get an user.
 // @Router		/api/v1/users [get]
-// @Param		id	query	string	true	"Id of user."	extensions(x-example=isutare412)
+// @Param		id	query	string	true	"Id of user."	extensions(x-example=id001)
 // @Success		200		{object}	getUserResp
 // @Failure		default	{object}	errorResp
 func getUser(uSvc port.UserService) http.HandlerFunc {
@@ -89,7 +89,7 @@ func getUser(uSvc port.UserService) http.HandlerFunc {
 // @Tags		User
 // @Description	Delete an user.
 // @Router		/api/v1/users [delete]
-// @Param		id	query	string	true	"Id of user."	extensions(x-example=isutare412)
+// @Param		id	query	string	true	"Id of user."	extensions(x-example=id001)
 // @Success		200
 // @Failure		default	{object}	errorResp
 func deleteUser(uSvc port.UserService) http.HandlerFunc {

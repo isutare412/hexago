@@ -18,12 +18,27 @@ definitions:
       givenName:
         type: string
       id:
-        example: isutare412
+        example: id001
         type: string
       middleName:
         type: string
       nickname:
         example: redshore
+        type: string
+    type: object
+  http.donateRelation:
+    properties:
+      cents:
+        example: 120
+        type: integer
+      nickname:
+        example: redshore
+        type: string
+      timestamp:
+        example: "2022-05-05T06:22:40.328Z"
+        type: string
+      userId:
+        example: id001
         type: string
     type: object
   http.errorResp:
@@ -42,6 +57,14 @@ definitions:
       birthYear:
         example: 1993
         type: integer
+      donatedFrom:
+        items:
+          $ref: '#/definitions/http.donateRelation'
+        type: array
+      donatedTo:
+        items:
+          $ref: '#/definitions/http.donateRelation'
+        type: array
       email:
         example: foo@bar.com
         type: string
@@ -50,7 +73,7 @@ definitions:
       givenName:
         type: string
       id:
-        example: isutare412
+        example: id001
         type: string
       middleName:
         type: string
@@ -64,8 +87,10 @@ definitions:
         example: 150
         type: integer
       donateeId:
+        example: id002
         type: string
       donatorId:
+        example: id001
         type: string
     type: object
 info:
@@ -102,7 +127,7 @@ paths:
         name: id
         required: true
         type: string
-        x-example: isutare412
+        x-example: id001
       responses:
         "200":
           description: ""
@@ -120,7 +145,7 @@ paths:
         name: id
         required: true
         type: string
-        x-example: isutare412
+        x-example: id001
       responses:
         "200":
           description: OK

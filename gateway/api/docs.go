@@ -55,7 +55,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "x-example": "isutare412",
+                        "x-example": "id001",
                         "description": "Id of user.",
                         "name": "id",
                         "in": "query",
@@ -113,7 +113,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "x-example": "isutare412",
+                        "x-example": "id001",
                         "description": "Id of user.",
                         "name": "id",
                         "in": "query",
@@ -162,7 +162,7 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "isutare412"
+                    "example": "id001"
                 },
                 "middleName": {
                     "type": "string"
@@ -170,6 +170,27 @@ const docTemplate = `{
                 "nickname": {
                     "type": "string",
                     "example": "redshore"
+                }
+            }
+        },
+        "http.donateRelation": {
+            "type": "object",
+            "properties": {
+                "cents": {
+                    "type": "integer",
+                    "example": 120
+                },
+                "nickname": {
+                    "type": "string",
+                    "example": "redshore"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2022-05-05T06:22:40.328Z"
+                },
+                "userId": {
+                    "type": "string",
+                    "example": "id001"
                 }
             }
         },
@@ -196,6 +217,18 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1993
                 },
+                "donatedFrom": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.donateRelation"
+                    }
+                },
+                "donatedTo": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.donateRelation"
+                    }
+                },
                 "email": {
                     "type": "string",
                     "example": "foo@bar.com"
@@ -208,7 +241,7 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "string",
-                    "example": "isutare412"
+                    "example": "id001"
                 },
                 "middleName": {
                     "type": "string"
@@ -227,10 +260,12 @@ const docTemplate = `{
                     "example": 150
                 },
                 "donateeId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "id002"
                 },
                 "donatorId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "id001"
                 }
             }
         }
