@@ -61,6 +61,7 @@ func (h *DonationHandler) handleMessage(
 	var req pbPay.DonationRequest
 	if err := proto.Unmarshal(msg.Value, &req); err != nil {
 		logger.S().Error(err)
+		return
 	}
 
 	err := h.dnxSvc.Donate(ctx, req.DonatorId, req.DonateeId, req.Cents)
@@ -70,6 +71,7 @@ func (h *DonationHandler) handleMessage(
 			"donateeId", req.DonateeId,
 			"cents", req.Cents,
 		).Error(err)
+		return
 	}
 
 	logger.A().With(
