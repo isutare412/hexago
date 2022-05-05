@@ -26,7 +26,7 @@ API gateway module for hexago service.
 
 ### [Hexago Payment](./payment)
 
-TBD.
+Payment module for hexago service.
 
 ### [Hexago Common](./common)
 
