@@ -1,0 +1,36 @@
+@url=http://localhost:8080
+
+################################################################################
+# Create user 1
+################################################################################
+POST {{url}}/api/v1/users
+Content-Type: application/json
+
+{
+  "id": "someid01",
+  "email": "foo@hexago.com",
+  "nickname": "redshore",
+  "givenName": "Suhyuk",
+  "middleName": "Swimmer",
+  "familyName": "Lee",
+  "birthYear": 1993,
+  "birthMonth": 9,
+  "birthDay": 25
+}
+
+################################################################################
+# Create user 2
+################################################################################
+POST {{url}}/api/v1/users
+Content-Type: application/json
+
+{
+  "id": "someid02",
+  "email": "bar@hexago.com",
+  "nickname": "blueshore",
+  "givenName": "Sungwon",
+  "familyName": "Kim",
+  "birthYear": 1993,
+  "birthMonth": 8,
+  "birthDay": 13
+}
