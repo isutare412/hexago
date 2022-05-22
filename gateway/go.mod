@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/http-swagger v1.2.6
 	github.com/swaggo/swag v1.8.1
-	go.mongodb.org/mongo-driver v1.8.4
+	go.mongodb.org/mongo-driver v1.9.1
 	go.uber.org/zap v1.21.0
 	google.golang.org/protobuf v1.28.0
 )
